@@ -1,0 +1,8 @@
+.idea
+.env
+*.db
+*.sql
+switch_case_statements.py
+hash_make.py
+work_manual.txt
+__pycache__
