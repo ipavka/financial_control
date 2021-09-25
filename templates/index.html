@@ -45,14 +45,57 @@
             min-width: 250px;
             max-width: 350px;
         }
-    </style>
 
+        .top {
+            display: flex;
+            place-self: flex-end;
+
+        }
+        .btn-logout {
+            margin: 15px;
+            padding: 10px;
+            background-color: #81a3d4;
+            font-size: 18px;
+            border-radius: 5px;
+            width: 100%;
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .description {
+            width: 90%;
+            min-width: 250px;
+            max-width: 350px;
+            text-align: center;
+        }
+    </style>
 
 </head>
 
 <body>
-    <h3>{{ answer }}</h3><br>
+
+{% if is_active %}
+    <div class="top">
+        <a class="btn-logout" href="/logout">Выйти</a>
+    </div>
+    <h1> Привет <br> {{ name_user }}</h1>
+    <div class="main-block">
+        <div class="description">
+            <h1>Статистика трат: <br>
+            за Месяц<br>
+            за Неделю<br>
+            за День</h1>
+        </div>
+        <form method="POST" action="/main">
+        <input type="text" name="main_input" required>
+        <input type="submit" value="Записать">
+            <span> {{ data }}</span>
+    </form>
+    </div>
+{% endif %}
+    {% if not is_active %}
     <div class="placeholder"></div>
+        <span>{{ answer }}</span>
     <form method="POST" action="/login">
         <input type="text" name="username" required>
         <input type="password" name="password" required>
@@ -60,6 +103,7 @@
 
     </form>
     <div class="placeholder"></div>
+    {% endif %}
 </body>
 
 </html>

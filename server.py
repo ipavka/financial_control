@@ -17,7 +17,6 @@ from config import (
     SECRET_KEY
 )
 
-
 db = SQLite('log_info.db')
 db.create_tables('users')
 
@@ -45,11 +44,12 @@ def sign_data(data: str) -> str:
 
 
 def get_username_from_signed_string(username_signed: str) -> Optional[str]:
-    username_base64, sign = username_signed.split('.')
-    logger.info(f'username_base64: {username_base64}')
     try:
+        username_base64, sign = username_signed.split('.')
+        # logger.info(f'username_base64: {username_base64}')
+
         username = base64.b64decode(username_base64.encode()).decode()
-        logger.info(f'username: {username}')
+        # logger.info(f'username: {username}')
         valid_sign = sign_data(username)
         if hmac.compare_digest(valid_sign, sign):
             return username
@@ -57,25 +57,28 @@ def get_username_from_signed_string(username_signed: str) -> Optional[str]:
         return
 
 
-@app.get('/cabinet', response_class=HTMLResponse)
-def index_page(request: Request, username: Optional[str] = Cookie(default=None)):
-    logger.info(f'request {request}')
-    logger.info(f'request {username}')
+@app.get('/', response_class=HTMLResponse)
+def index_page(request: Request,
+               username: Optional[str] = Cookie(default=None)):
+    # logger.info(f'request {request.method}')
+    # logger.info(f'request {username}')
     context = {
         "request": request,
     }
     if not username:
-        logger.info(f'Первый if')
+        # logger.info(f'Первый if')
         return tem.TemplateResponse('index.html', context)
     valid_username = get_username_from_signed_string(username)
-    logger.info(f'request {valid_username}')
+    # logger.info(f'request {valid_username}')
     if not valid_username:
         response = tem.TemplateResponse('index.html', context)
         response.delete_cookie(key="username")
         return response
     context = {
         "request": request,
-        "answer": f'Привет!!! {valid_username}'
+        "name_user": valid_username,
+        "is_active": True,
+        # "data_in": main_input
     }
     response = tem.TemplateResponse('index.html', context)
     return response
@@ -92,21 +95,35 @@ def process_login_page(
     }
     data_user = db.get_user_data(username)
     if not data_user or not verify_password(username, password):
-        # return Response(f'Я вас не знаю! <h2>{username}</h2>', media_type='text/html')
         return tem.TemplateResponse('index.html', context)
-    user = data_user.get('user')
-    # response = Response(
-    #     f'Привет, {user}',
-    #     media_type='text/html'
-    # )
-    context['answer'] = f'Привет, {user}!'
-    response = tem.TemplateResponse('index.html', context)
-    # response = RedirectResponse('/main.html', status_code=status.HTTP_302_FOUND)
-    username_signed = base64.b64encode(username.encode()).decode() + "." + sign_data(username)
+    response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
+    username_signed = base64.b64encode(
+        username.encode()).decode() + "." + sign_data(username)
     response.set_cookie(key="username", value=username_signed)
+    return response
+
+
+@app.post('/main', response_class=HTMLResponse)
+def private_page(request: Request,
+                 username: Optional[str] = Cookie(default=None),
+                 main_input: str = Form(...)):
+    valid_username = get_username_from_signed_string(username)
+    context = {
+        "request": request,
+        "answer": f'Hello! {valid_username}',
+        "data": f'input ->  {main_input}',
+        "is_active": True,
+    }
+    response = tem.TemplateResponse('index.html', context)
+    return response
+
+
+@app.get('/logout', response_class=HTMLResponse)
+def logout_user():
+    response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
+    response.delete_cookie(key="username")
     return response
 
 
 if __name__ == '__main__':
     pass
-
