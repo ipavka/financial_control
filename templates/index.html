@@ -79,6 +79,7 @@
         <a class="btn-logout" href="/logout">Выйти</a>
     </div>
     <h1> Привет <br> {{ name_user }}</h1>
+
     <div class="main-block">
         <div class="description">
             <h1>Статистика трат: <br>
@@ -89,7 +90,7 @@
         <form method="POST" action="/main">
         <input type="text" name="main_input" required>
         <input type="submit" value="Записать">
-            <span> {{ data }}</span>
+            <span> {{ main_message }}</span>
     </form>
     </div>
 {% endif %}

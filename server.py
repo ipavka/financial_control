@@ -12,6 +12,8 @@ from fastapi.templating import Jinja2Templates
 from loguru import logger
 
 from db import SQLite
+from main import pars_user_input, get_category_name
+from make_data import make_date, ru_date_unix
 from config import (
     PASSWORD_SALT,
     SECRET_KEY
@@ -108,14 +110,39 @@ def private_page(request: Request,
                  username: Optional[str] = Cookie(default=None),
                  main_input: str = Form(...)):
     valid_username = get_username_from_signed_string(username)
-    context = {
-        "request": request,
-        "answer": f'Hello! {valid_username}',
-        "data": f'input ->  {main_input}',
-        "is_active": True,
-    }
-    response = tem.TemplateResponse('index.html', context)
-    return response
+
+    if pars_user_input(main_input):
+        sum_of_cost, alias, description = pars_user_input(main_input)
+        all_category = db.get_all_categories(valid_username)
+        ready_category = get_category_name(alias, all_category)
+
+        db.insert_cost({'sum_of_money_co': sum_of_cost,
+                        'descrip_co': description,
+                        'category': ready_category,
+                        'who_spend': valid_username,
+                        'view_date': ru_date_unix()[1],
+                        'created': make_date()})
+        context = {
+            "request": request,
+            # "name_user": f'Hello! {valid_username}',
+            "main_message": f'Записал {sum_of_cost} {description} '
+                            f'В {ready_category}',
+            # "data": main_input,
+            "is_active": True,
+        }
+
+        response = tem.TemplateResponse('index.html', context)
+        return response
+
+    else:
+        context = {
+            "request": request,
+            "is_active": True,
+            "main_message": f"Ты ввел {main_input} "
+                            f"А надо так 120 мтс",
+        }
+        response = tem.TemplateResponse('index.html', context)
+        return response
 
 
 @app.get('/logout', response_class=HTMLResponse)
@@ -127,3 +154,12 @@ def logout_user():
 
 if __name__ == '__main__':
     pass
+    # data_dict = db.get_all_categories('demo')
+    # print(get_category_name('мтс', data_dict))
+    # print(data_dict)
+    # db.insert_cost({'sum_of_money_co': '120',
+    #                 'descrip_co': 'хлеб',
+    #                 'category': 'products',
+    #                 'who_spend': 'demo',
+    #                 'view_date': '25_Сентября_2021',
+    #                 'created': '2021-09-25 15:48:58'})

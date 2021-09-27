@@ -4,7 +4,8 @@ import sqlite3
 class SQLite:
     def __init__(self, database_file):
         """Подключение к БД и создание курсора соединения"""
-        self.connection = sqlite3.connect(database_file, check_same_thread=False)
+        self.connection = sqlite3.connect(database_file,
+                                          check_same_thread=False)
         self.cursor = self.connection.cursor()
 
     def create_tables(self, name_tab):
@@ -26,9 +27,9 @@ class SQLite:
         result = {}
         with self.connection:
             data = self.cursor.execute(
-                    "SELECT login, password "
-                    "FROM users "
-                    "WHERE login = ?", (user_name,)).fetchall()
+                "SELECT login, password "
+                "FROM users "
+                "WHERE login = ?", (user_name,)).fetchall()
             if not data:
                 return None
             else:
@@ -42,9 +43,9 @@ class SQLite:
         result = {}
         with self.connection:
             data = self.cursor.execute(
-                    "SELECT codename, included "
-                    "FROM categories "
-                    "WHERE creator = ?", (user,)).fetchall()
+                "SELECT codename, included "
+                "FROM categories "
+                "WHERE creator = ?", (user,)).fetchall()
             if not data:
                 return None
             else:
@@ -53,7 +54,7 @@ class SQLite:
                 return result
 
     def select_sha(self, user_name):
-        """Извлечь все из нужной таблицы"""
+        """ Извлечь все из нужной таблицы """
         with self.connection:
             result = self.cursor.execute(f'SELECT `password` '
                                          f'FROM users '
@@ -62,3 +63,17 @@ class SQLite:
                 return None
             else:
                 return "".join(result)
+
+    def insert_cost(self, column_values: dict):
+        """ Запись расхода """
+        placeholders = ",".join("?" * len(column_values.keys()))
+        columns = ', '.join(column_values.keys())
+        values = tuple(column_values.values())
+        with self.connection:
+            self.cursor.execute(f"INSERT INTO costs "
+                                f"({columns}) "
+                                f"VALUES({placeholders});", values)
+
+
+if __name__ == '__main__':
+    pass
