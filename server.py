@@ -76,10 +76,13 @@ def index_page(request: Request,
         response = tem.TemplateResponse('index.html', context)
         response.delete_cookie(key="username")
         return response
+
+    data_from_category = db.get_all_categories(valid_username)
     context = {
         "request": request,
         "name_user": valid_username,
         "is_active": True,
+        "data_table": data_from_category,
         # "data_in": main_input
     }
     response = tem.TemplateResponse('index.html', context)
@@ -110,31 +113,41 @@ def private_page(request: Request,
                  username: Optional[str] = Cookie(default=None),
                  main_input: str = Form(...)):
     valid_username = get_username_from_signed_string(username)
-
-    if pars_user_input(main_input):
+    data_from_category = db.get_all_categories(valid_username)
+    if pars_user_input(main_input):  # проверка на валидность цифры расхода
         sum_of_cost, alias, description = pars_user_input(main_input)
         all_category = db.get_all_categories(valid_username)
         ready_category = get_category_name(alias, all_category)
+        if ready_category:  # есть ли такой алиас в категориях
+            db.insert_cost({'sum_of_money_co': sum_of_cost,
+                            'descrip_co': description,
+                            'category': ready_category,
+                            'who_spend': valid_username,
+                            'view_date': ru_date_unix()[1],
+                            'created': make_date()})
 
-        db.insert_cost({'sum_of_money_co': sum_of_cost,
-                        'descrip_co': description,
-                        'category': ready_category,
-                        'who_spend': valid_username,
-                        'view_date': ru_date_unix()[1],
-                        'created': make_date()})
-        context = {
-            "request": request,
-            # "name_user": f'Hello! {valid_username}',
-            "main_message": f'Записал {sum_of_cost} {description} '
-                            f'В {ready_category}',
-            # "data": main_input,
-            "is_active": True,
-        }
+            context = {
+                "request": request,
+                "main_message": f'Записал {sum_of_cost} {description} '
+                                f'В {ready_category}',
+                "data_in": main_input,
+                "data_table": data_from_category,
+                "is_active": True,
+            }
 
-        response = tem.TemplateResponse('index.html', context)
-        return response
+            response = tem.TemplateResponse('index.html', context)
+            return response
+        else:
+            context = {
+                "request": request,
+                "main_message": f'НЕТ такого | {description} | алиаса в категориях!',
+                "is_active": True,
+                "data_table": data_from_category,
+            }
+            response = tem.TemplateResponse('index.html', context)
+            return response
 
-    else:
+    else:  # если не валиндное число
         context = {
             "request": request,
             "is_active": True,
@@ -157,9 +170,10 @@ if __name__ == '__main__':
     # data_dict = db.get_all_categories('demo')
     # print(get_category_name('мтс', data_dict))
     # print(data_dict)
-    # db.insert_cost({'sum_of_money_co': '120',
-    #                 'descrip_co': 'хлеб',
-    #                 'category': 'products',
-    #                 'who_spend': 'demo',
-    #                 'view_date': '25_Сентября_2021',
-    #                 'created': '2021-09-25 15:48:58'})
+    # result = db.get_all_categories('demo')
+    # print(result.keys())
+    # for i, j in result.items():
+    #     print(i, j.replace(" ", ", "))
+    # all_category = db.get_all_categories('demo')
+    # ready_category = get_category_name('мтсt', all_category)
+    # print(ready_category)

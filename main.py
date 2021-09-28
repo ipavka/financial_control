@@ -24,9 +24,10 @@ def pars_user_input(user_in: str):
 if __name__ == '__main__':
     pass
 
-    # print(pars_user_input(cost2))
-    sum_of_cost1, alias1, description1 = pars_user_input(cost2)
-    print(sum_of_cost1)
-    print(alias1)
-    print(description1)
+    print(pars_user_input(cost2))
+    # sum_of_cost1, alias1, description1 = pars_user_input(cost2)
+    # print(sum_of_cost1)
+    # print(alias1)
+    # print(description1)
+
 

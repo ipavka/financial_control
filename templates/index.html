@@ -68,6 +68,47 @@
             max-width: 350px;
             text-align: center;
         }
+
+            .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+                table {
+          font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+          border-collapse: collapse;
+          color: #686461;
+        }
+        caption {
+          padding: 10px;
+          color: white;
+          background: #8FD4C1;
+          font-size: 18px;
+          text-align: left;
+          font-weight: bold;
+        }
+        th {
+          border-bottom: 3px solid #B9B29F;
+          padding: 10px;
+          text-align: center;
+        }
+        td {
+          padding: 10px;
+            text-align: center;
+        }
+        tr:nth-child(odd) {
+          background: white;
+        }
+        tr:nth-child(even) {
+          background: #E8E6D1;
+        }
     </style>
 
 </head>
@@ -93,6 +134,24 @@
             <span> {{ main_message }}</span>
     </form>
     </div>
+
+    <table class="main-table">
+
+        <thead>
+    <tr>
+        <th>Кетегория</th>
+        <th>Алиасы</th>
+    </tr>
+    </thead>
+        {% for name, data in data_table.items() %}
+    <tr>
+        <td> {{ name }} {% if data_in %} <input type="button" class="button" value="{{ data_in }}"> {% endif %} </td>
+        <td> {{ data.replace(" ", " | ") }} </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
 {% endif %}
     {% if not is_active %}
     <div class="placeholder"></div>
