@@ -8,7 +8,7 @@ cost1 = cost.split()
 def get_category_name(find_item: str, data: dict) -> str:
     """ Определяем категорию по алиасу """
     for category, aliases in data.items():
-        if find_item in aliases:
+        if find_item in aliases.split():
             return category
 
 

@@ -69,8 +69,8 @@
             text-align: center;
         }
 
-            .button {
-        background-color: #4CAF50;
+            .button-add {
+        background-color: #4c7aaf;
         border: none;
         color: white;
         padding: 15px 32px;
@@ -110,6 +110,27 @@
           background: #E8E6D1;
         }
     </style>
+    <script>
+
+    document.addEventListener("DOMContentLoaded", function (){
+        let btn = document.querySelector('.button-add')
+        if (btn) {
+            btn.addEventListener("click", async function (e) {
+//                console.log(e.target.id)
+ //               let answ = document.querySelector('.button-add').id
+                let answ = e.target.id
+                let response = await fetch('/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: `{"choice": "${answ}"}`
+                });
+                let response_json = await response.json();
+                console.log('Response:', response_json);
+            })
+        }
+        })
+
+    </script>
 
 </head>
 
@@ -119,7 +140,7 @@
     <div class="top">
         <a class="btn-logout" href="/logout">Выйти</a>
     </div>
-    <h1> Привет <br> {{ name_user }}</h1>
+   {% if name_user %} <h1> Привет <br> {{ name_user }}</h1> {% endif %}
 
     <div class="main-block">
         <div class="description">
@@ -145,7 +166,11 @@
     </thead>
         {% for name, data in data_table.items() %}
     <tr>
-        <td> {{ name }} {% if data_in %} <input type="button" class="button" value="{{ data_in }}"> {% endif %} </td>
+        <td> <b>{{ name }}</b> <br>
+            {% if data_in %}  Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
+                <input id="{{ name }}" type="button" class="button-add" value="&#10004">
+
+            {% endif %} </td>
         <td> {{ data.replace(" ", " | ") }} </td>
 
     </tr>

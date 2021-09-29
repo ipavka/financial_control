@@ -7,7 +7,7 @@ from pprint import pprint
 
 from fastapi import FastAPI, Form, Cookie, Body, Request, status
 from fastapi.param_functions import Body
-from fastapi.responses import Response, HTMLResponse, RedirectResponse
+from fastapi.responses import Response, HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 
@@ -108,7 +108,22 @@ def process_login_page(
     return response
 
 
-@app.post('/main', response_class=HTMLResponse)
+@app.post('/add')
+def add_new_alias(data: dict = Body(...),
+                  username: Optional[str] = Cookie(default=None)):
+    valid_username = get_username_from_signed_string(username)
+    print(data)
+    print(valid_username)
+    response = Response(
+        json.dumps({
+            'message': f'Привет: {data} {valid_username}'
+        }),
+        media_type='application/json')
+    return response
+
+
+# @app.post('/main', response_class=HTMLResponse)
+@app.post('/main')
 def private_page(request: Request,
                  username: Optional[str] = Cookie(default=None),
                  main_input: str = Form(...)):
@@ -116,8 +131,8 @@ def private_page(request: Request,
     data_from_category = db.get_all_categories(valid_username)
     if pars_user_input(main_input):  # проверка на валидность цифры расхода
         sum_of_cost, alias, description = pars_user_input(main_input)
-        all_category = db.get_all_categories(valid_username)
-        ready_category = get_category_name(alias, all_category)
+        # all_category = db.get_all_categories(valid_username)
+        ready_category = get_category_name(alias, data_from_category)
         if ready_category:  # есть ли такой алиас в категориях
             db.insert_cost({'sum_of_money_co': sum_of_cost,
                             'descrip_co': description,
@@ -130,7 +145,6 @@ def private_page(request: Request,
                 "request": request,
                 "main_message": f'Записал {sum_of_cost} {description} '
                                 f'В {ready_category}',
-                "data_in": main_input,
                 "data_table": data_from_category,
                 "is_active": True,
             }
@@ -143,6 +157,7 @@ def private_page(request: Request,
                 "main_message": f'НЕТ такого | {description} | алиаса в категориях!',
                 "is_active": True,
                 "data_table": data_from_category,
+                "data_in": description,
             }
             response = tem.TemplateResponse('index.html', context)
             return response
@@ -168,6 +183,7 @@ def logout_user():
 if __name__ == '__main__':
     pass
     # data_dict = db.get_all_categories('demo')
+    # data_dict = db._select_aliases('junkFood', 'demo')
     # print(get_category_name('мтс', data_dict))
     # print(data_dict)
     # result = db.get_all_categories('demo')

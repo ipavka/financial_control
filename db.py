@@ -74,6 +74,25 @@ class SQLite:
                                 f"({columns}) "
                                 f"VALUES({placeholders});", values)
 
+    def update_category(self, alias, user, category):
+        """ добавить алиас в нужную категорию по определенному юзеру """
+        with self.connection:
+            self.cursor.execute(f'UPDATE categories '
+                                f'SET included = included || " " || "{alias}" '
+                                f'WHERE codename = "{category}" '
+                                f'AND creator = "{user}"')
+
+    def _select_aliases(self, category, user):
+        """ Алиасы категории определенного юзера
+        если нужно будет избежать повторов алиасов
+        """
+        with self.connection:
+            result = self.cursor.execute(f"SELECT included "
+                                         f"FROM categories "
+                                         f"WHERE codename = '{category}' "
+                                         f"AND creator = '{user}';").fetchone()
+        return ''.join(result)
+
 
 if __name__ == '__main__':
     pass
