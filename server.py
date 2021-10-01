@@ -27,6 +27,14 @@ app = FastAPI()
 tem = Jinja2Templates(directory="templates")
 
 
+def encode_cookies(sting: str) -> str:
+    return base64.b64encode(sting.encode()).decode()
+
+
+def decode_cookies(sting: str) -> str:
+    return base64.b64decode(sting).decode()
+
+
 def verify_password(username: str, password: str) -> bool:
     """ Делаем Хеш и проверяем сходство """
     password_hash = hmac.new(
@@ -77,12 +85,12 @@ def index_page(request: Request,
         response.delete_cookie(key="username")
         return response
 
-    data_from_category = db.get_all_categories(valid_username)
+    # data_from_category = db.get_all_categories(valid_username)
     context = {
         "request": request,
         "name_user": valid_username,
         "is_active": True,
-        "data_table": data_from_category,
+        # "data_table": data_from_category,
         # "data_in": main_input
     }
     response = tem.TemplateResponse('index.html', context)
@@ -110,10 +118,12 @@ def process_login_page(
 
 @app.post('/add')
 def add_new_alias(data: dict = Body(...),
-                  username: Optional[str] = Cookie(default=None)):
+                  username: Optional[str] = Cookie(default=None),
+                  user_input: Optional[str] = Cookie(default=None)):
     valid_username = get_username_from_signed_string(username)
     print(data)
     print(valid_username)
+    print(decode_cookies(user_input))
     response = Response(
         json.dumps({
             'message': f'Привет: {data} {valid_username}'
@@ -122,8 +132,7 @@ def add_new_alias(data: dict = Body(...),
     return response
 
 
-# @app.post('/main', response_class=HTMLResponse)
-@app.post('/main')
+@app.post('/main', response_class=HTMLResponse)
 def private_page(request: Request,
                  username: Optional[str] = Cookie(default=None),
                  main_input: str = Form(...)):
@@ -154,12 +163,14 @@ def private_page(request: Request,
         else:
             context = {
                 "request": request,
-                "main_message": f'НЕТ такого | {description} | алиаса в категориях!',
+                "main_message": description,
+                "not_alias": True,
                 "is_active": True,
                 "data_table": data_from_category,
                 "data_in": description,
             }
             response = tem.TemplateResponse('index.html', context)
+            response.set_cookie(key="user_input", value=encode_cookies(main_input))
             return response
 
     else:  # если не валиндное число
@@ -177,6 +188,7 @@ def private_page(request: Request,
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="username")
+    response.delete_cookie(key="user_input")
     return response
 
 
@@ -193,3 +205,5 @@ if __name__ == '__main__':
     # all_category = db.get_all_categories('demo')
     # ready_category = get_category_name('мтсt', all_category)
     # print(ready_category)
+    # print(encode_cookies('60 кола'))
+    # print(decode_cookies('NjAg0LrQvtC70LA='))

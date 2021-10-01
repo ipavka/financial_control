@@ -80,4 +80,4 @@ def cyr_to_lat(string):
 
 
 if __name__ == "__main__":
-    print(cyr_to_lat('помидор1234'))
+    print(cyr_to_lat('кола'))

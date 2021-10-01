@@ -109,24 +109,152 @@
         tr:nth-child(even) {
           background: #E8E6D1;
         }
+
+        .alias {
+            color: #ec3a55;
+        }
+
+        .info-alias {
+            text-align: center;
+        }
+
+        .arrow-7 {
+    margin: 40px auto 10px auto;
+    width: 18px;
+    height: 50px;
+        }
+
+        .arrow-right {
+    margin: 40px auto 10px auto;
+    width: 8px;
+    height: 25px;
+        }
+
+        .arrow-left {
+    margin: 40px auto 10px auto;
+    width: 8px;
+    height: 25px;
+        }
+
+        .arrow-left span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-bottom: 5px solid #b7334b;
+    border-left: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow-left 2s infinite;
+        }
+
+        .arrow-right span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-top: 5px solid #b7334b;
+    border-right: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow-right 2s infinite;
+        }
+
+    .arrow-left span:nth-child(1){
+        animation-delay: -0.2s;
+    }
+    .arrow-right span:nth-child(2){
+        animation-delay: -0.4s;
+    }
+
+    .arrow-left span:nth-child(1){
+    animation-delay: -0.2s;
+}
+    .arrow-right span:nth-child(2){
+        animation-delay: -0.4s;
+    }
+
+    @keyframes arrow-left {
+    0%{
+        opacity: 0;
+        transform: rotate(45deg) translate(-0px, -0px) ;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(45deg) translate(0px, 0px) ;
+    }
+}
+
+    @keyframes arrow-right {
+    0%{
+        opacity: 0;
+        transform: rotate(45deg) translate(-0px,-0px) ;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(45deg) translate(0px, 0px) ;
+    }
+}
+
+.arrow-7 span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-bottom: 5px solid #b7334b;
+    border-right: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow-7 2s infinite;
+        }
+
+.arrow-7 span:nth-child(1){
+    animation-delay: -0.2s;
+}
+.arrow-7 span:nth-child(2){
+    animation-delay: -0.4s;
+}
+@keyframes arrow-7 {
+    0%{
+        opacity: 0;
+        transform: translate(0,-20px) rotate(45deg);
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: translate(0,20px) rotate(45deg);
+    }
+}
+
+
     </style>
     <script>
 
     document.addEventListener("DOMContentLoaded", function (){
-        let btn = document.querySelector('.button-add')
+        const btn = document.querySelectorAll('.button-add')
         if (btn) {
-            btn.addEventListener("click", async function (e) {
-//                console.log(e.target.id)
- //               let answ = document.querySelector('.button-add').id
-                let answ = e.target.id
+            btn.forEach((item) => item.addEventListener("click",
+                async function (e) {
+                e.preventDefault();
+                let ans = e.target.id
                 let response = await fetch('/add', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: `{"choice": "${answ}"}`
+                    body: `{"choice": "${ans}"}`
                 });
-                let response_json = await response.json();
-                console.log('Response:', response_json);
-            })
+                await response.json();
+               // let response_json = await response.json();
+               // console.log('Response:', response_json);
+                }
+            ))
         }
         })
 
@@ -136,7 +264,7 @@
 
 <body>
 
-{% if is_active %}
+{% if is_active and not not_alias%}
     <div class="top">
         <a class="btn-logout" href="/logout">Выйти</a>
     </div>
@@ -155,6 +283,27 @@
             <span> {{ main_message }}</span>
     </form>
     </div>
+{% endif %}
+
+{% if not_alias %}
+<div class="add-alias">
+
+
+    <div class="info-alias">
+        <h1>НЕТ такого алиаса в категориях!</h1>
+        <div class="arrow-left">
+            <span></span>
+        </div>
+    <h1 class="alias"><b> {{ main_message }}</b></h1>
+
+        <div class="arrow-right">
+            <span></span>
+        </div>
+
+    </div>
+
+</div>
+
 
     <table class="main-table">
 
@@ -167,17 +316,22 @@
         {% for name, data in data_table.items() %}
     <tr>
         <td> <b>{{ name }}</b> <br>
-            {% if data_in %}  Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
+            {% if data_in %}
+                <div class="arrow-7">
+                <span></span>
+                    </div>
+                Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
                 <input id="{{ name }}" type="button" class="button-add" value="&#10004">
 
-            {% endif %} </td>
+                {% endif %} </td>
         <td> {{ data.replace(" ", " | ") }} </td>
 
     </tr>
     {% endfor %}
 </table>
+{% endif%}
 
-{% endif %}
+
     {% if not is_active %}
     <div class="placeholder"></div>
         <span>{{ answer }}</span>
