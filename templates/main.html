@@ -32,8 +32,17 @@
 
         {% if write_down %}
         <div class="write-info">
-            <span>{{ main_message }}</span>
-            <span>{{ data_table }}</span>
+            <h3>Записал</h3>
+            <span><b>{{ message.sum_of_cost }} {{ message.description }}</b></span>
+            <h4>В категорию:  {{ message.ready_category }}</h4>
+        </div>
+        {% endif %}
+
+        {% if incorrect_input %}
+        <div class="write-info">
+            <h3>Некорректный ввод!</h3>
+            <span>Введено: <b>{{ message }}</b></span>
+            <h4>Пиши так: 120 мтс</h4>
         </div>
         {% endif %}
 

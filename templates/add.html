@@ -2,9 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Добавить Алиас</title>
+    <meta name="viewport" content="with=device-width, initial-scale=1">
+    <link href="../static/css/add.css" rel="stylesheet">
+    <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <div class="add-alias">
+        <h1>НЕТ такого алиаса в категориях!</h1>
+            <div class="info-alias">
+
+                <div class="arrow-left">
+                    <span></span>
+                </div>
+
+                <h1 class="alias"><b> {{ main_message }}</b></h1>
+
+                <div class="arrow-right">
+                    <span></span>
+                </div>
+
+            </div>
+    </div>
+
+    <table class="main-table">
+    <thead>
+    <tr>
+        <th>Кетегория</th>
+        <th>Алиасы</th>
+    </tr>
+    </thead>
+
+    {% for name, data in data_table.items() %}
+    <tr>
+        <td> <b>{{ name }}</b> <br>
+        <div class="arrow">
+            <span></span>
+        </div>
+        Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
+        <form method="POST" action="/add">
+            <p>
+                <input class="check-box" type="checkbox" name="choice" value="{{ name }}">
+                {{ name }}
+            </p>
+            <p>
+                <input type="submit" value="Добавить" class="button-add">
+            </p>
+        </form>
+        </td>
+
+        <td> {{ data.replace(" ", " | ") }} </td>
+
+    </tr>
+    {% endfor %}
+    </table>
 
 </body>
 </html>

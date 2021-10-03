@@ -154,24 +154,25 @@ def private_page(request: Request,
 
             context = {
                 "request": request,
-                "main_message": f'Записал {sum_of_cost} {description} '
-                                f'В {ready_category}',
-                "data_table": data_from_category,
+                "name_user": valid_username,
                 "write_down": True,
+                "message": {"sum_of_cost": sum_of_cost,
+                            "description": description,
+                            "ready_category": ready_category},
             }
 
-            response = tem.TemplateResponse('index.html', context)
+            response = tem.TemplateResponse('main.html', context)
             return response
         else:  # если нет такого алиаса
             context = {
                 "request": request,
                 "main_message": description,
-                "not_alias": True,
-                "is_active": True,
+                # "not_alias": True,
+                # "is_active": True,
                 "data_table": data_from_category,
                 "data_in": description,
             }
-            response = tem.TemplateResponse('index.html', context)
+            response = tem.TemplateResponse('add.html', context)
             response.set_cookie(key="user_input",
                                 value=encode_cookies(main_input))
             return response
@@ -179,11 +180,11 @@ def private_page(request: Request,
     else:  # если не валиндное число
         context = {
             "request": request,
-            "is_active": True,
-            "main_message": f"Ты ввел {main_input} "
-                            f"А надо так 120 мтс",
+            "name_user": valid_username,
+            "incorrect_input": True,
+            "message": main_input,
         }
-        response = tem.TemplateResponse('index.html', context)
+        response = tem.TemplateResponse('main.html', context)
         return response
 
 
@@ -209,7 +210,7 @@ if __name__ == '__main__':
     # print(get_category_name('мтс', data_dict))
     # print(data_dict)
     # result = db.get_all_categories('demo')
-    # print(result.keys())
+    # print(result)
     # for i, j in result.items():
     #     print(i, j.replace(" ", ", "))
     # all_category = db.get_all_categories('demo')

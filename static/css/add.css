@@ -1,0 +1,181 @@
+/* Таблица начало */
+.main-table {
+  border-collapse: collapse;
+  color: #686461;
+}
+th {
+  border-bottom: 3px solid #B9B29F;
+  padding: 10px;
+  text-align: center;
+}
+td {
+  padding: 10px;
+    text-align: center;
+}
+tr:nth-child(odd) {
+  background: white;
+}
+tr:nth-child(even) {
+  background: #E8E6D1;
+}
+/* Таблица конец */
+
+.alias {
+    color: #ec3a55;
+}
+
+.add-alias {
+    text-align: center;
+}
+
+.info-alias {
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+form {
+    width: 90%;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.check-box {
+    height: 30px;
+}
+
+.button-add {
+    background-color: #4c7aaf;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+/* Стрелки начало */
+    /* Вертикальные стрелки начало */
+.arrow {
+    margin: 40px auto 10px auto;
+    width: 18px;
+    height: 50px;
+}
+
+.arrow span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-bottom: 5px solid #b7334b;
+    border-right: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow 2s infinite;
+}
+
+.arrow span:nth-child(1){
+    animation-delay: -0.2s;
+}
+.arrow span:nth-child(2){
+    animation-delay: -0.4s;
+}
+
+@keyframes arrow {
+    0%{
+        opacity: 0;
+        transform: translate(0,-20px) rotate(45deg);
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: translate(0,20px) rotate(45deg);
+    }
+}
+    /* Вертикальные стрелки конец */
+
+    /* Горизонтальные стрелки начало */
+.arrow-right {
+    margin: 40px auto 10px auto;
+    width: 8px;
+    height: 25px;
+}
+
+.arrow-left {
+    margin: 40px auto 10px auto;
+    width: 8px;
+    height: 25px;
+}
+
+.arrow-left span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-bottom: 5px solid #b7334b;
+    border-left: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow-left 2s infinite;
+}
+
+.arrow-right span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-top: 5px solid #b7334b;
+    border-right: 5px solid #b7334b;
+
+    transform: rotate(45deg);
+    margin: -16px 0;
+    animation: arrow-right 2s infinite;
+}
+
+.arrow-left span:nth-child(1){
+        animation-delay: -0.2s;
+}
+.arrow-right span:nth-child(2){
+    animation-delay: -0.4s;
+}
+
+.arrow-left span:nth-child(1){
+    animation-delay: -0.2s;
+}
+.arrow-right span:nth-child(2){
+        animation-delay: -0.4s;
+}
+
+@keyframes arrow-left {
+    0%{
+        opacity: 0;
+        transform: rotate(45deg) translate(-0px, -0px) ;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(45deg) translate(0px, 0px) ;
+    }
+}
+
+@keyframes arrow-right {
+    0%{
+        opacity: 0;
+        transform: rotate(45deg) translate(-0px,-0px) ;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(45deg) translate(0px, 0px) ;
+    }
+}
+    /* Горизонтальные стрелки начало */
+/* Стрелки конец */
