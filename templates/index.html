@@ -27,6 +27,10 @@
             flex: 1;
         }
 
+        .check-box {
+            height: 30px;
+        }
+
         input {
             display: block;
             font-size: 18px;
@@ -115,6 +119,12 @@
         }
 
         .info-alias {
+            text-align: center;
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .add-alias {
             text-align: center;
         }
 
@@ -236,29 +246,31 @@
 
 
     </style>
-    <script>
-
-    document.addEventListener("DOMContentLoaded", function (){
-        const btn = document.querySelectorAll('.button-add')
-        if (btn) {
-            btn.forEach((item) => item.addEventListener("click",
-                async function (e) {
-                e.preventDefault();
-                let ans = e.target.id
-                let response = await fetch('/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: `{"choice": "${ans}"}`
-                });
-                await response.json();
-               // let response_json = await response.json();
-               // console.log('Response:', response_json);
-                }
-            ))
-        }
-        })
-
-    </script>
+{#    <script>#}
+{##}
+{#    document.addEventListener("DOMContentLoaded", function (){#}
+{#        const btn = document.querySelectorAll('.button-add')#}
+{#        if (btn) {#}
+{#            btn.forEach((item) => item.addEventListener("click",#}
+{#                async function (e) {#}
+{#                e.preventDefault();#}
+{#                let ans = e.target.id#}
+{#                let response = await fetch('/add', {#}
+{#                    method: 'POST',#}
+{#                    headers: { 'Content-Type': 'application/json' },#}
+{#                    body: `{"category": "${ans}"}`#}
+{#                });#}
+{#          //        await response.text();#}
+{#                let response_json = await response.json();#}
+{#               console.log('Response:', response_json);#}
+{#               let body = document.querySelector('body');#}
+{#               body.innerHTML = response_json.message;#}
+{#                }#}
+{#            ))#}
+{#        }#}
+{#        })#}
+{##}
+{#    </script>#}
 
 </head>
 
@@ -287,13 +299,15 @@
 
 {% if not_alias %}
 <div class="add-alias">
-
+<h1>НЕТ такого алиаса в категориях!</h1>
 
     <div class="info-alias">
-        <h1>НЕТ такого алиаса в категориях!</h1>
+
+
         <div class="arrow-left">
             <span></span>
         </div>
+
     <h1 class="alias"><b> {{ main_message }}</b></h1>
 
         <div class="arrow-right">
@@ -321,8 +335,11 @@
                 <span></span>
                     </div>
                 Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
-                <input id="{{ name }}" type="button" class="button-add" value="&#10004">
-
+{#                <input id="{{ name }}" type="button" class="button-add" value="&#10004">#}
+                <form method="POST" action="/add">
+    <p><input class="check-box"type="checkbox" name="choice" value="{{ name }}"> {{ name }}</p>
+                <p><input type="submit" value="Добавить" class="button-add"></p>
+                </form>
                 {% endif %} </td>
         <td> {{ data.replace(" ", " | ") }} </td>
 

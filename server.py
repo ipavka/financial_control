@@ -6,8 +6,10 @@ from typing import Optional
 from pprint import pprint
 
 from fastapi import FastAPI, Form, Cookie, Body, Request, status
+from fastapi.staticfiles import StaticFiles
 from fastapi.param_functions import Body
-from fastapi.responses import Response, HTMLResponse, RedirectResponse, JSONResponse
+from fastapi.responses import Response, HTMLResponse, RedirectResponse, \
+    JSONResponse
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 
@@ -25,6 +27,7 @@ db.create_tables('users')
 app = FastAPI()
 
 tem = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 def encode_cookies(sting: str) -> str:
@@ -70,18 +73,16 @@ def get_username_from_signed_string(username_signed: str) -> Optional[str]:
 @app.get('/', response_class=HTMLResponse)
 def index_page(request: Request,
                username: Optional[str] = Cookie(default=None)):
-    # logger.info(f'request {request.method}')
-    # logger.info(f'request {username}')
     context = {
         "request": request,
     }
     if not username:
-        # logger.info(f'Первый if')
-        return tem.TemplateResponse('index.html', context)
+        # return tem.TemplateResponse('index.html', context)
+        return tem.TemplateResponse('login.html', context)
     valid_username = get_username_from_signed_string(username)
-    # logger.info(f'request {valid_username}')
     if not valid_username:
-        response = tem.TemplateResponse('index.html', context)
+        # response = tem.TemplateResponse('index.html', context)
+        response = tem.TemplateResponse('login.html', context)
         response.delete_cookie(key="username")
         return response
 
@@ -93,7 +94,8 @@ def index_page(request: Request,
         # "data_table": data_from_category,
         # "data_in": main_input
     }
-    response = tem.TemplateResponse('index.html', context)
+    # response = tem.TemplateResponse('index.html', context)
+    response = tem.TemplateResponse('login.html', context)
     return response
 
 
@@ -116,19 +118,27 @@ def process_login_page(
     return response
 
 
-@app.post('/add')
-def add_new_alias(data: dict = Body(...),
+@app.post('/add', response_class=HTMLResponse)
+def add_new_alias(request: Request,
+                  choice: str = Form(...),
                   username: Optional[str] = Cookie(default=None),
                   user_input: Optional[str] = Cookie(default=None)):
     valid_username = get_username_from_signed_string(username)
-    print(data)
+    print(choice)
     print(valid_username)
-    print(decode_cookies(user_input))
-    response = Response(
-        json.dumps({
-            'message': f'Привет: {data} {valid_username}'
-        }),
-        media_type='application/json')
+    # print(decode_cookies(user_input))
+    summ, alias = decode_cookies(user_input).split()
+    print(summ)
+    print(alias)
+    context = {
+        "request": request,
+        "is_active": True,
+        'choice': choice,
+        'valid_username': valid_username,
+        'user_input': f'{summ} {alias}',
+    }
+
+    response = tem.TemplateResponse('main.html', context)
     return response
 
 
@@ -140,7 +150,6 @@ def private_page(request: Request,
     data_from_category = db.get_all_categories(valid_username)
     if pars_user_input(main_input):  # проверка на валидность цифры расхода
         sum_of_cost, alias, description = pars_user_input(main_input)
-        # all_category = db.get_all_categories(valid_username)
         ready_category = get_category_name(alias, data_from_category)
         if ready_category:  # есть ли такой алиас в категориях
             db.insert_cost({'sum_of_money_co': sum_of_cost,
@@ -160,7 +169,7 @@ def private_page(request: Request,
 
             response = tem.TemplateResponse('index.html', context)
             return response
-        else:
+        else:  # если нет такого алиаса
             context = {
                 "request": request,
                 "main_message": description,
@@ -170,7 +179,8 @@ def private_page(request: Request,
                 "data_in": description,
             }
             response = tem.TemplateResponse('index.html', context)
-            response.set_cookie(key="user_input", value=encode_cookies(main_input))
+            response.set_cookie(key="user_input",
+                                value=encode_cookies(main_input))
             return response
 
     else:  # если не валиндное число
@@ -188,6 +198,13 @@ def private_page(request: Request,
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="username")
+    response.delete_cookie(key="user_input")
+    return response
+
+
+@app.get('/resume', response_class=HTMLResponse)
+def logout_user():
+    response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="user_input")
     return response
 
