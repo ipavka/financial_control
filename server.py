@@ -77,25 +77,18 @@ def index_page(request: Request,
         "request": request,
     }
     if not username:
-        # return tem.TemplateResponse('index.html', context)
         return tem.TemplateResponse('login.html', context)
     valid_username = get_username_from_signed_string(username)
     if not valid_username:
-        # response = tem.TemplateResponse('index.html', context)
         response = tem.TemplateResponse('login.html', context)
         response.delete_cookie(key="username")
         return response
 
-    # data_from_category = db.get_all_categories(valid_username)
     context = {
         "request": request,
         "name_user": valid_username,
-        "is_active": True,
-        # "data_table": data_from_category,
-        # "data_in": main_input
     }
-    # response = tem.TemplateResponse('index.html', context)
-    response = tem.TemplateResponse('login.html', context)
+    response = tem.TemplateResponse('main.html', context)
     return response
 
 
@@ -106,11 +99,11 @@ def process_login_page(
         password: str = Form(...)):
     context = {
         "request": request,
-        "answer": f'Я вас не знаю! {username}'
+        "notice": f'Я вас не знаю! {username}'
     }
     data_user = db.get_user_data(username)
     if not data_user or not verify_password(username, password):
-        return tem.TemplateResponse('index.html', context)
+        return tem.TemplateResponse('login.html', context)
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     username_signed = base64.b64encode(
         username.encode()).decode() + "." + sign_data(username)
@@ -164,7 +157,7 @@ def private_page(request: Request,
                 "main_message": f'Записал {sum_of_cost} {description} '
                                 f'В {ready_category}',
                 "data_table": data_from_category,
-                "is_active": True,
+                "write_down": True,
             }
 
             response = tem.TemplateResponse('index.html', context)

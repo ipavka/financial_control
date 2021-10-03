@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Ввод данных</title>
     <meta charset="UTF-8">
-    <title>main.html</title>
+    <meta name="viewport" content="with=device-width, initial-scale=1">
+    <link href="../static/css/main.css" rel="stylesheet">
+    <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<p>{{ choice }}</p>
-<p>{{ valid_username }}</p>
-<p>{{ user_input }}</p>
-    <div class="top2" style="display: flex">
-        <a class="btn-logout" href="/resume">Продолжить записи</a>
+
+    <div class="top">
+        <a class="btn-logout" href="/logout">Выйти</a>
     </div>
+    <h1> Привет, <br>{{ name_user.capitalize() }}</h1>
+
+    <div class="main-block">
+        <div class="description">
+            <h1>Статистика трат: <br>
+            за Месяц<br>
+            за Неделю<br>
+            за День</h1>
+        </div>
+
+    <form method="POST" action="/main">
+        <input type="text" name="main_input" required>
+        <input type="submit" value="Записать">
+    </form>
+
+        {% if write_down %}
+        <div class="write-info">
+            <span>{{ main_message }}</span>
+            <span>{{ data_table }}</span>
+        </div>
+        {% endif %}
+
+    </div>
+
 </body>
+
 </html>
