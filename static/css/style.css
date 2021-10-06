@@ -37,16 +37,23 @@ form {
     margin: auto;
 }
 
-.top {
-    display: flex;
-    place-self: flex-end;
+.block-form {
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-.description {
-    width: 90%;
-    min-width: 250px;
-    max-width: 350px;
-    text-align: center;
+.top {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    max-width: 380px;
+}
+
+.user-logo {
+    display: flex;
+    flex-direction: column-reverse;
+    text-decoration: none;
+    color: #4294ff;
 }
 
 .btn-logout {
@@ -55,33 +62,37 @@ form {
     background-color: #81a3d4;
     font-size: 18px;
     border-radius: 5px;
-    width: 100%;
     text-decoration: none;
     color: #000000;
 }
 
-.write-info {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
 
 /* Таблица начало */
+
+.block-table {
+    max-width: 1024px;
+    box-shadow: 5px 20px 50px rgba(16, 112, 177, 0.2);
+}
+
 .main-table {
-  border-collapse: collapse;
+  border-collapse: separate;
   color: #686461;
+    border:1px solid #B9B29F;
+    border-radius: 20px;
 }
 th {
-  border-bottom: 3px solid #B9B29F;
+  /*border-bottom: 3px solid #B9B29F;*/
   padding: 10px;
   text-align: center;
 }
 td {
   padding: 10px;
     text-align: center;
+    border:1px solid #B9B29F;
+    border-radius: 20px;
 }
 tr:nth-child(odd) {
-  background: white;
+  /*background: white;*/
 }
 tr:nth-child(even) {
   background: #E8E6D1;
@@ -113,6 +124,61 @@ tr:nth-child(even) {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+}
+
+.block-add {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.card {
+    width: 359px;
+    padding: 44px 32px;
+    box-sizing: border-box;
+    box-shadow: 5px 20px 50px rgba(16, 112, 177, 0.2);
+    border-radius: 10px;
+    background-color: #f8f8ff;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.incorrect {
+    box-shadow: 10px 20px 40px rgba(177, 16, 59, 0.64);
+}
+
+.write-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 20px 50px rgba(14, 211, 101, 0.58);
+}
+
+.last-note {
+    padding: 10px;
+    margin-top: 100px;
+    position: absolute;
+	bottom: 0;
+}
+
+.card__img {
+    align-self: center;
+    margin-bottom: 51px;
+}
+
+@media (max-width: 320px) {
+    .card {
+        width: 100%;
+    }
+}
+
+.heading-mini {
+    font-size: 20px;
+    line-height: 30px;
+    color: #1F3F68;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
 }
 
 /* Стрелки начало */

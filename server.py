@@ -84,9 +84,12 @@ def index_page(request: Request,
         response.delete_cookie(key="username")
         return response
 
+    # 'count=3 - кол-во записей'
+    data_notes = db.select_last_costs(valid_username, count=3)
     context = {
         "request": request,
         "name_user": valid_username,
+        "last_notes": data_notes,
     }
     response = tem.TemplateResponse('main.html', context)
     return response
@@ -115,23 +118,22 @@ def process_login_page(
 def add_new_alias(request: Request,
                   choice: str = Form(...),
                   username: Optional[str] = Cookie(default=None),
-                  user_input: Optional[str] = Cookie(default=None)):
+                  main_input: Optional[str] = Cookie(default=None)):
+
     valid_username = get_username_from_signed_string(username)
-    print(choice)
-    print(valid_username)
-    # print(decode_cookies(user_input))
-    summ, alias = decode_cookies(user_input).split()
-    print(summ)
-    print(alias)
+    sum_of_cost, alias, description = pars_user_input(decode_cookies(main_input))
+
     context = {
         "request": request,
-        "is_active": True,
-        'choice': choice,
-        'valid_username': valid_username,
-        'user_input': f'{summ} {alias}',
+        "added_alias": True,
+        "not_alias": False,
+        'choice': f'Из чек-бокса: {choice}',
+        'name_user': valid_username,
+        'main_input': f'То что ввели: {sum_of_cost} {alias} {description}',
+        'add_info': f'Добавил Алиас: {alias} в категорию {choice}',
     }
 
-    response = tem.TemplateResponse('main.html', context)
+    response = tem.TemplateResponse('add.html', context)
     return response
 
 
@@ -166,14 +168,15 @@ def private_page(request: Request,
         else:  # если нет такого алиаса
             context = {
                 "request": request,
-                "main_message": description,
-                # "not_alias": True,
-                # "is_active": True,
+                "name_user": valid_username,
+                "main_message": alias,
+                "not_alias": True,
+                "added_alias": False,
                 "data_table": data_from_category,
-                "data_in": description,
+                "data_in": alias,
             }
             response = tem.TemplateResponse('add.html', context)
-            response.set_cookie(key="user_input",
+            response.set_cookie(key="main_input",
                                 value=encode_cookies(main_input))
             return response
 
@@ -192,23 +195,23 @@ def private_page(request: Request,
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="username")
-    response.delete_cookie(key="user_input")
+    response.delete_cookie(key="main_input")
     return response
 
 
 @app.get('/resume', response_class=HTMLResponse)
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
-    response.delete_cookie(key="user_input")
+    response.delete_cookie(key="main_input")
     return response
 
 
 if __name__ == '__main__':
     pass
-    # data_dict = db.get_all_categories('demo')
+    data_dict = db.select_last_costs('demo')
     # data_dict = db._select_aliases('junkFood', 'demo')
     # print(get_category_name('мтс', data_dict))
-    # print(data_dict)
+    print(data_dict)
     # result = db.get_all_categories('demo')
     # print(result)
     # for i, j in result.items():

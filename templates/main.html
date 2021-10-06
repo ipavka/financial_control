@@ -13,25 +13,28 @@
 <body>
 
     <div class="top">
+        <a class="btn-logout" href="/">Главная</a>
+        <a class="user-logo" href="#">{{ name_user.capitalize() }}
+            <img src="../static/img/user.png" title="User_data">
+        </a>
         <a class="btn-logout" href="/logout">Выйти</a>
     </div>
-    <h1> Привет, <br>{{ name_user.capitalize() }}</h1>
 
-    <div class="main-block">
-        <div class="description">
-            <h1>Статистика трат: <br>
-            за Месяц<br>
-            за Неделю<br>
-            за День</h1>
-        </div>
+    <div class="card block-form">
+        <form method="POST" action="/main">
+            <input type="text" name="main_input" required>
+            <input type="submit" value="Записать">
+        </form>
+    </div>
 
-    <form method="POST" action="/main">
-        <input type="text" name="main_input" required>
-        <input type="submit" value="Записать">
-    </form>
+    <div class="card last-note">
+    {% for summ, descrip in last_notes.items() %}
+        <p>{{ summ }} : {{ descrip }}</p>
+        {% endfor %}
+    </div>
 
         {% if write_down %}
-        <div class="write-info">
+        <div class="card write-info">
             <h3>Записал</h3>
             <span><b>{{ message.sum_of_cost }} {{ message.description }}</b></span>
             <h4>В категорию:  {{ message.ready_category }}</h4>
@@ -39,7 +42,7 @@
         {% endif %}
 
         {% if incorrect_input %}
-        <div class="write-info">
+        <div class="card incorrect">
             <h3>Некорректный ввод!</h3>
             <span>Введено: <b>{{ message }}</b></span>
             <h4>Пиши так: 120 мтс</h4>

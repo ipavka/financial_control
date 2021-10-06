@@ -64,6 +64,23 @@ class SQLite:
             else:
                 return "".join(result)
 
+    def select_last_costs(self, user_name: str, count: int = None):
+        """ Извлечь расходы пользоватля """
+        result = {}
+        with self.connection:
+            data = self.cursor.execute(
+                f'SELECT sum_of_money_co, descrip_co '
+                f'FROM costs '
+                f'WHERE `who_spend` = ? '
+                f'ORDER BY created DESC ',
+                (user_name,)).fetchall()
+            if not data:
+                return None
+            else:
+                for i in data[:count]:
+                    result[i[0]] = i[1]
+                return result
+
     def insert_cost(self, column_values: dict):
         """ Запись расхода """
         placeholders = ",".join("?" * len(column_values.keys()))
