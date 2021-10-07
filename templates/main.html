@@ -21,16 +21,10 @@
     </div>
 
     <div class="card block-form">
-        <form method="POST" action="/main">
+        <form id="clear" method="POST" action="/main">
             <input type="text" name="main_input" required>
             <input type="submit" value="Записать">
         </form>
-    </div>
-
-    <div class="card last-note">
-    {% for summ, descrip in last_notes.items() %}
-        <p>{{ summ }} : {{ descrip }}</p>
-        {% endfor %}
     </div>
 
         {% if write_down %}
@@ -38,6 +32,12 @@
             <h3>Записал</h3>
             <span><b>{{ message.sum_of_cost }} {{ message.description }}</b></span>
             <h4>В категорию:  {{ message.ready_category }}</h4>
+            <form method="POST" action="/del">
+                <p>
+                    <input type="hidden" name="id_cost" value="{{ message.costs_id }}">
+                    <input type="submit" value="Удалить"  class="button-del">
+                </p>
+            </form>
         </div>
         {% endif %}
 
@@ -49,7 +49,15 @@
         </div>
         {% endif %}
 
-    </div>
+    {% if last_notes %}
+        <div class="card last-note">
+            <p class="text">Крайние записи</p>
+        {% for descrip in last_notes.values() %}
+            <li>{{ descrip }}</li>
+        {% endfor %}
+        </div>
+    {% endif %}
+
 
 </body>
 

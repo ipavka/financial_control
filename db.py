@@ -1,5 +1,6 @@
 import sqlite3
 
+from make_data import convert_in_datetime
 
 class SQLite:
     def __init__(self, database_file):
@@ -69,7 +70,7 @@ class SQLite:
         result = {}
         with self.connection:
             data = self.cursor.execute(
-                f'SELECT sum_of_money_co, descrip_co '
+                f'SELECT cost_id, sum_of_money_co, descrip_co, created '
                 f'FROM costs '
                 f'WHERE `who_spend` = ? '
                 f'ORDER BY created DESC ',
@@ -77,8 +78,9 @@ class SQLite:
             if not data:
                 return None
             else:
+                # for j, i in enumerate(data[:count], 1):
                 for i in data[:count]:
-                    result[i[0]] = i[1]
+                    result[i[0]] = f"{i[1]} : {i[2]}, {convert_in_datetime(i[3])}"
                 return result
 
     def insert_cost(self, column_values: dict):

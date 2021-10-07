@@ -15,14 +15,14 @@ from loguru import logger
 
 from db import SQLite
 from main import pars_user_input, get_category_name
-from make_data import make_date, ru_date_unix
+from make_data import make_date, ru_date_unix, convert_in_datetime
 from config import (
     PASSWORD_SALT,
     SECRET_KEY
 )
 
 db = SQLite('log_info.db')
-db.create_tables('users')
+# db.create_tables('users')
 
 app = FastAPI()
 
@@ -119,9 +119,9 @@ def add_new_alias(request: Request,
                   choice: str = Form(...),
                   username: Optional[str] = Cookie(default=None),
                   main_input: Optional[str] = Cookie(default=None)):
-
     valid_username = get_username_from_signed_string(username)
-    sum_of_cost, alias, description = pars_user_input(decode_cookies(main_input))
+    sum_of_cost, alias, description = pars_user_input(
+        decode_cookies(main_input))
 
     context = {
         "request": request,
@@ -143,6 +143,7 @@ def private_page(request: Request,
                  main_input: str = Form(...)):
     valid_username = get_username_from_signed_string(username)
     data_from_category = db.get_all_categories(valid_username)
+    # data_notes = db.select_last_costs(valid_username, count=3)
     if pars_user_input(main_input):  # проверка на валидность цифры расхода
         sum_of_cost, alias, description = pars_user_input(main_input)
         ready_category = get_category_name(alias, data_from_category)
@@ -154,17 +155,23 @@ def private_page(request: Request,
                             'view_date': ru_date_unix()[1],
                             'created': make_date()})
 
+            data_notes = db.select_last_costs(valid_username, count=3)
+            pprint(max(data_notes.keys()))
             context = {
                 "request": request,
                 "name_user": valid_username,
                 "write_down": True,
                 "message": {"sum_of_cost": sum_of_cost,
                             "description": description,
-                            "ready_category": ready_category},
+                            "ready_category": ready_category,
+                            "costs_id": max(data_notes.keys())
+                            },
+                "last_notes": data_notes,
             }
 
             response = tem.TemplateResponse('main.html', context)
             return response
+
         else:  # если нет такого алиаса
             context = {
                 "request": request,
@@ -191,6 +198,13 @@ def private_page(request: Request,
         return response
 
 
+@app.post('/del', response_class=HTMLResponse)
+def delete_last_cost(request: Request,
+                     id_cost: str = Form(...),
+                     username: Optional[str] = Cookie(default=None)):
+    print(id_cost)
+
+
 @app.get('/logout', response_class=HTMLResponse)
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
@@ -209,13 +223,19 @@ def logout_user():
 if __name__ == '__main__':
     pass
     data_dict = db.select_last_costs('demo')
+    # result = {}
+    # for i in data_dict:
+    #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
     # data_dict = db._select_aliases('junkFood', 'demo')
     # print(get_category_name('мтс', data_dict))
-    print(data_dict)
+    # print(result)
+    pprint(data_dict.get(max(data_dict.keys())))
+    pprint(max(data_dict.keys()))
+    pprint(data_dict)
     # result = db.get_all_categories('demo')
     # print(result)
-    # for i, j in result.items():
-    #     print(i, j.replace(" ", ", "))
+    # for i in data_dict.values():
+    #     print(i)
     # all_category = db.get_all_categories('demo')
     # ready_category = get_category_name('мтсt', all_category)
     # print(ready_category)
