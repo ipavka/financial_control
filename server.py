@@ -70,6 +70,16 @@ def get_username_from_signed_string(username_signed: str) -> Optional[str]:
         return
 
 
+@app.get("/page/{page_name}", response_class=HTMLResponse)
+async def page(request: Request, page_name: int = 3):
+    context = {
+        "request": request,
+        "page": page_name
+    }
+
+    return tem.TemplateResponse("info.html", context)
+
+
 @app.get('/', response_class=HTMLResponse)
 def index_page(request: Request,
                username: Optional[str] = Cookie(default=None)):
@@ -137,6 +147,19 @@ def add_new_alias(request: Request,
     return response
 
 
+@app.get('/info', response_class=HTMLResponse)
+def user_data(request: Request,
+              username: Optional[str] = Cookie(default=None)):
+    valid_username = get_username_from_signed_string(username)
+    all_costs = db.select_last_costs(valid_username)
+    context = {
+        "request": request,
+        "user": all_costs
+    }
+    response = tem.TemplateResponse('info.html', context)
+    return response
+
+
 @app.post('/main', response_class=HTMLResponse)
 def private_page(request: Request,
                  username: Optional[str] = Cookie(default=None),
@@ -156,7 +179,8 @@ def private_page(request: Request,
                             'created': make_date()})
 
             data_notes = db.select_last_costs(valid_username, count=3)
-            pprint(max(data_notes.keys()))
+            costs_id = sorted(data_notes.items())[-1][0]
+            what = sorted(data_notes.items())[-1][1].split(',')[0]
             context = {
                 "request": request,
                 "name_user": valid_username,
@@ -164,7 +188,7 @@ def private_page(request: Request,
                 "message": {"sum_of_cost": sum_of_cost,
                             "description": description,
                             "ready_category": ready_category,
-                            "costs_id": max(data_notes.keys())
+                            "costs_id": f'{costs_id}, {what}'
                             },
                 "last_notes": data_notes,
             }
@@ -201,8 +225,19 @@ def private_page(request: Request,
 @app.post('/del', response_class=HTMLResponse)
 def delete_last_cost(request: Request,
                      id_cost: str = Form(...),
-                     username: Optional[str] = Cookie(default=None)):
-    print(id_cost)
+                     username: Optional[str] = Cookie(default=None),
+                     ):
+    cost_id, description = id_cost.split(', ')
+    valid_username = get_username_from_signed_string(username)
+    db.delete_last_cost(cost_id)
+    context = {
+        "request": request,
+        "name_user": valid_username,
+        "delete_cost": True,
+        "report": description,
+    }
+    response = tem.TemplateResponse('main.html', context)
+    return response
 
 
 @app.get('/logout', response_class=HTMLResponse)
@@ -222,16 +257,16 @@ def logout_user():
 
 if __name__ == '__main__':
     pass
-    data_dict = db.select_last_costs('demo')
+    # data_dict = db.select_last_costs('demo')
     # result = {}
     # for i in data_dict:
     #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
     # data_dict = db._select_aliases('junkFood', 'demo')
     # print(get_category_name('мтс', data_dict))
     # print(result)
-    pprint(data_dict.get(max(data_dict.keys())))
-    pprint(max(data_dict.keys()))
-    pprint(data_dict)
+    # pprint(data_dict.get(max(data_dict.keys())))
+    # pprint(sorted(data_dict.items())[-1])
+    # pprint(data_dict)
     # result = db.get_all_categories('demo')
     # print(result)
     # for i in data_dict.values():

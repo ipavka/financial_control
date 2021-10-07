@@ -78,7 +78,6 @@ class SQLite:
             if not data:
                 return None
             else:
-                # for j, i in enumerate(data[:count], 1):
                 for i in data[:count]:
                     result[i[0]] = f"{i[1]} : {i[2]}, {convert_in_datetime(i[3])}"
                 return result
@@ -100,6 +99,15 @@ class SQLite:
                                 f'SET included = included || " " || "{alias}" '
                                 f'WHERE codename = "{category}" '
                                 f'AND creator = "{user}"')
+
+    def delete_last_cost(self, row_id: int):
+        """ Удалить запись из расходов по id """
+        with self.connection:
+            self.cursor.execute(
+                f"DELETE "
+                f"FROM costs "
+                f"WHERE cost_id = ? ", (row_id,)
+            )
 
     def _select_aliases(self, category, user):
         """ Алиасы категории определенного юзера

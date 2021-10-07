@@ -153,6 +153,7 @@ tr:nth-child(even) {
     display: flex;
     flex-direction: column;
     box-shadow: 5px 20px 50px rgba(14, 211, 101, 0.58);
+    padding: 10px 10px;
 }
 
 .button-del {

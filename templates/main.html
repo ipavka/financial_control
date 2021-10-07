@@ -14,7 +14,7 @@
 
     <div class="top">
         <a class="btn-logout" href="/">Главная</a>
-        <a class="user-logo" href="#">{{ name_user.capitalize() }}
+        <a class="user-logo" href="/info">{{ name_user.capitalize() }}
             <img src="../static/img/user.png" title="User_data">
         </a>
         <a class="btn-logout" href="/logout">Выйти</a>
@@ -35,9 +35,16 @@
             <form method="POST" action="/del">
                 <p>
                     <input type="hidden" name="id_cost" value="{{ message.costs_id }}">
-                    <input type="submit" value="Удалить"  class="button-del">
+                    <input type="submit" value="Удалить" class="button-del">
                 </p>
             </form>
+        </div>
+        {% endif %}
+
+        {% if delete_cost %}
+        <div class="card write-info">
+            <h3>Удалил</h3>
+            <span><b>{{ report }}</b></span>
         </div>
         {% endif %}
 
