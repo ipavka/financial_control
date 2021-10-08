@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Инфо</title>
+    <meta name="viewport" content="with=device-width, initial-scale=1">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
 </head>
+
 <body>
 <h1>Тут Выборки и редактирование</h1>
-<p>{{ page }}</p>
+
+    <table class="main-table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Сумма</th>
+                <th>Описание</th>
+                <th>Категория</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        {% for row in all_costs %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.how_much }}</td>
+                <td>{{ row.description }}</td>
+                <td>{{ row.category }}</td>
+                <td>{{ row.created }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 </body>
 </html>

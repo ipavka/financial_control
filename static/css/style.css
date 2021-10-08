@@ -86,10 +86,10 @@ th {
   text-align: center;
 }
 td {
-  padding: 10px;
-    text-align: center;
-    border:1px solid #B9B29F;
-    border-radius: 20px;
+  /*padding: 10px;*/
+  text-align: center;
+  border:1px solid #B9B29F;
+  border-radius: 20px;
 }
 tr:nth-child(odd) {
   /*background: white;*/

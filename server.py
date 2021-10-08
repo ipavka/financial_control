@@ -147,14 +147,18 @@ def add_new_alias(request: Request,
     return response
 
 
-@app.get('/info', response_class=HTMLResponse)
+@app.get('/info/{page_num}', response_class=HTMLResponse)
 def user_data(request: Request,
+              page_num: int,
               username: Optional[str] = Cookie(default=None)):
     valid_username = get_username_from_signed_string(username)
-    all_costs = db.select_last_costs(valid_username)
+    start = page_num - 3
+    end = page_num
+    all_costs = db.select_all_costs(valid_username, start=start, end=end)
     context = {
         "request": request,
-        "user": all_costs
+        "user": valid_username,
+        "all_costs": all_costs,
     }
     response = tem.TemplateResponse('info.html', context)
     return response
@@ -258,6 +262,7 @@ def logout_user():
 if __name__ == '__main__':
     pass
     # data_dict = db.select_last_costs('demo')
+    data_dict = db.select_all_costs('demo', end=3)
     # result = {}
     # for i in data_dict:
     #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
@@ -266,11 +271,11 @@ if __name__ == '__main__':
     # print(result)
     # pprint(data_dict.get(max(data_dict.keys())))
     # pprint(sorted(data_dict.items())[-1])
-    # pprint(data_dict)
+    pprint(data_dict)
     # result = db.get_all_categories('demo')
     # print(result)
-    # for i in data_dict.values():
-    #     print(i)
+    # for i in data_dict:
+    #     print(i.description)
     # all_category = db.get_all_categories('demo')
     # ready_category = get_category_name('мтсt', all_category)
     # print(ready_category)

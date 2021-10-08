@@ -1,4 +1,5 @@
 import sqlite3
+from collections import namedtuple
 
 from make_data import convert_in_datetime
 
@@ -66,7 +67,7 @@ class SQLite:
                 return "".join(result)
 
     def select_last_costs(self, user_name: str, count: int = None):
-        """ Извлечь расходы пользоватля """
+        """ Извлечь расходы пользоватля кратко """
         result = {}
         with self.connection:
             data = self.cursor.execute(
@@ -80,6 +81,25 @@ class SQLite:
             else:
                 for i in data[:count]:
                     result[i[0]] = f"{i[1]} : {i[2]}, {convert_in_datetime(i[3])}"
+                return result
+
+    def select_all_costs(self, user_name: str, start: int = None, end: int = None):
+        """ Извлечь все расходы пользоватля """
+        Costs = namedtuple('Costs', 'id, how_much, description, category, '
+                                    'created')
+        result = []
+        with self.connection:
+            data = self.cursor.execute(
+                f'SELECT cost_id, sum_of_money_co, descrip_co, category, created '
+                f'FROM costs '
+                f'WHERE `who_spend` = ? '
+                f'ORDER BY created ',
+                (user_name,)).fetchall()
+            if not data:
+                return None
+            else:
+                for i in map(Costs._make, data[start:end]):
+                    result.append(i)
                 return result
 
     def insert_cost(self, column_values: dict):
