@@ -98,9 +98,10 @@ class SQLite:
             if not data:
                 return None
             else:
+                data_len = len(data)
                 for i in map(Costs._make, data[start:end]):
                     result.append(i)
-                return result
+                return result, data_len
 
     def insert_cost(self, column_values: dict):
         """ Запись расхода """

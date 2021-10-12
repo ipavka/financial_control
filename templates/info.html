@@ -35,5 +35,14 @@
         {% endfor %}
     </table>
 
+    <div class="links">
+    {% if skip_less >= 0 %}
+        <a class="links-a"href="/items/?skip={{ skip_less }}">back</a>
+    {% endif %}
+        {% if count_costs > skip_more %}
+            <a class="links-a"href="/items/?skip={{ skip_more }}">next</a>
+        {% endif %}
+    </div>
+
 </body>
 </html>

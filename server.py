@@ -2,7 +2,7 @@ import hashlib
 import hmac
 import base64
 import json
-from typing import Optional
+from typing import Optional, Union
 from pprint import pprint
 
 from fastapi import FastAPI, Form, Cookie, Body, Request, status
@@ -68,16 +68,6 @@ def get_username_from_signed_string(username_signed: str) -> Optional[str]:
             return username
     except Exception:
         return
-
-
-@app.get("/page/{page_name}", response_class=HTMLResponse)
-async def page(request: Request, page_name: int = 3):
-    context = {
-        "request": request,
-        "page": page_name
-    }
-
-    return tem.TemplateResponse("info.html", context)
 
 
 @app.get('/', response_class=HTMLResponse)
@@ -154,14 +144,50 @@ def user_data(request: Request,
     valid_username = get_username_from_signed_string(username)
     start = page_num - 3
     end = page_num
-    all_costs = db.select_all_costs(valid_username, start=start, end=end)
+    all_costs, count_costs = db.select_all_costs(valid_username, start=start, end=end)
     context = {
         "request": request,
         "user": valid_username,
         "all_costs": all_costs,
+        "range_": count_costs + 1,
     }
     response = tem.TemplateResponse('info.html', context)
     return response
+
+
+fake_items_db = [{"item_name": "Foo"},
+                 {"item_name": "Bar"},
+                 {"item_name": "Baz"},
+                 {"item_name": "Foo1"},
+                 {"item_name": "Bar2"},
+                 {"item_name": "Baz3"},
+                 ]
+
+@app.get("/items/", response_class=HTMLResponse)
+def read_item(request: Request,
+              username: Optional[str] = Cookie(default=None),
+              skip: Union[int, str] = 0,
+              limit: Union[int, str] = 5):
+    valid_username = get_username_from_signed_string(username)
+    print(skip)
+    try:
+        limit = skip + limit
+        all_costs, count_costs = db.select_all_costs(valid_username, start=skip,
+                                                     end=limit)
+        print(f'Всего: {count_costs}')
+        context = {
+            "request": request,
+            "user": valid_username,
+            "all_costs": all_costs,
+            "count_costs": count_costs,
+            "skip_more": skip + 5,
+            "skip_less": skip - 5,
+        }
+        response = tem.TemplateResponse('info.html', context)
+        return response
+        # return fake_items_db[skip: skip + limit]  # срез
+    except Exception as e:
+        return f'Wrong: {e}'
 
 
 @app.post('/main', response_class=HTMLResponse)
@@ -262,7 +288,9 @@ def logout_user():
 if __name__ == '__main__':
     pass
     # data_dict = db.select_last_costs('demo')
-    data_dict = db.select_all_costs('demo', end=3)
+    data_dict = db.select_all_costs('demo', start=0, end=10)
+    data_dict1 = db.select_all_costs('demo', start=10, end=20)
+    data_dict2 = db.select_all_costs('demo', start=20, end=30)
     # result = {}
     # for i in data_dict:
     #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
@@ -271,7 +299,9 @@ if __name__ == '__main__':
     # print(result)
     # pprint(data_dict.get(max(data_dict.keys())))
     # pprint(sorted(data_dict.items())[-1])
-    pprint(data_dict)
+    # pprint(data_dict[0])
+    # pprint(data_dict1[0])
+    pprint(data_dict2[0])
     # result = db.get_all_categories('demo')
     # print(result)
     # for i in data_dict:

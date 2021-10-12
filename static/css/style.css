@@ -99,6 +99,24 @@ tr:nth-child(even) {
 }
 /* Таблица конец */
 
+.links {
+    margin-top: 20px;
+    display: inline-block;
+    /*background: #1C6EA4;*/
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.links-a {
+    display: inline-block;
+    background: #1C6EA4;
+    color: #FFFFFF;
+    padding: 1em;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
 .alias {
     color: #ec3a55;
 }
