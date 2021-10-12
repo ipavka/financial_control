@@ -28,7 +28,7 @@
     {% for row in all_costs %}
     <tr>
         <td>{{ row.id }}</td>
-        <td class="Prc">{{ row.how_much }}</td>
+        <td id="{{ row.id }}" class="Prc">{{ row.how_much }}</td>
         <td>{{ row.description }}</td>
         <td>{{ row.category }}</td>
         <td>{{ row.created }}</td>

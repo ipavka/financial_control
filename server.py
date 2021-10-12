@@ -137,29 +137,12 @@ def add_new_alias(request: Request,
     return response
 
 
-@app.get('/info/{page_num}', response_class=HTMLResponse)
-def user_data(request: Request,
-              page_num: int,
-              username: Optional[str] = Cookie(default=None)):
-    valid_username = get_username_from_signed_string(username)
-    start = page_num - 3
-    end = page_num
-    all_costs, count_costs = db.select_all_costs(valid_username, start=start, end=end)
-    context = {
-        "request": request,
-        "user": valid_username,
-        "all_costs": all_costs,
-        "range_": count_costs + 1,
-    }
-    response = tem.TemplateResponse('info.html', context)
-    return response
-
-
 @app.post('/input')
 def update_table(username: Optional[str] = Cookie(default=None),
                  data: dict = Body(...)):
     valid_username = get_username_from_signed_string(username)
-    print(data['info'])
+    print(data['cost'])
+    print(data['cost_id'])
     print(valid_username)
 
 
@@ -277,7 +260,8 @@ def logout_user():
 
 
 @app.get('/resume', response_class=HTMLResponse)
-def logout_user():
+def continue_record():
+    """ Выход после добавления алиаса """
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="main_input")
     return response
@@ -286,9 +270,9 @@ def logout_user():
 if __name__ == '__main__':
     pass
     # data_dict = db.select_last_costs('demo')
-    data_dict = db.select_all_costs('demo', start=0, end=10)
-    data_dict1 = db.select_all_costs('demo', start=10, end=20)
-    data_dict2 = db.select_all_costs('demo', start=20, end=30)
+    # data_dict = db.select_all_costs('demo', start=0, end=10)
+    # data_dict1 = db.select_all_costs('demo', start=10, end=20)
+    # data_dict2 = db.select_all_costs('demo', start=20, end=30)
     # result = {}
     # for i in data_dict:
     #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
@@ -299,7 +283,7 @@ if __name__ == '__main__':
     # pprint(sorted(data_dict.items())[-1])
     # pprint(data_dict[0])
     # pprint(data_dict1[0])
-    pprint(data_dict2[0])
+    # pprint(data_dict2[0])
     # result = db.get_all_categories('demo')
     # print(result)
     # for i in data_dict:

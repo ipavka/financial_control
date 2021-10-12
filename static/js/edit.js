@@ -16,6 +16,7 @@ function applyEdit(tabID, editables) {
             let tds = rows[r].getElementsByTagName("td");
             for (let c = 0; c < tds.length; c++) {
                 if (editables.indexOf(c) > -1)
+                    // console.log(tds[0])
                     tds[c].onclick = function () { beginEdit(this); };
             }
         }
@@ -23,7 +24,7 @@ function applyEdit(tabID, editables) {
 }
 let oldColor, oldText, padTop, padBottom = "";
 function beginEdit(td) {
-
+    // console.log(td.id)
     if (td.firstChild && td.firstChild.tagName === "INPUT")
         return;
 
@@ -59,14 +60,19 @@ async function endEdit(input) {
     let td = input.parentNode;
     td.removeChild(td.firstChild);	//remove input
     td.innerHTML = input.value;
-    let change = input.value;
+    // console.log(td.id)
+    // let change = input.value;
 
     // console.log(td.innerHTML)
     if (oldText !== input.value.trim() ) {
+        let change = {
+            in: input.value,
+            id: td.id
+        }
         let response = await fetch('/input', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: `{"info": "${change}"}`
+            body: `{"cost": "${change.in}", "cost_id": "${change.id}" }`
         })
         await response.json();
         td.style.color = "red";
@@ -77,4 +83,4 @@ async function endEdit(input) {
     td.style.paddingBottom = padBottom;
     td.style.backgroundColor = oldColor;
 }
-applyEdit("tab1", [1, 2]);
+applyEdit("tab1", [1]);
