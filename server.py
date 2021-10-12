@@ -155,13 +155,13 @@ def user_data(request: Request,
     return response
 
 
-fake_items_db = [{"item_name": "Foo"},
-                 {"item_name": "Bar"},
-                 {"item_name": "Baz"},
-                 {"item_name": "Foo1"},
-                 {"item_name": "Bar2"},
-                 {"item_name": "Baz3"},
-                 ]
+@app.post('/input')
+def update_table(username: Optional[str] = Cookie(default=None),
+                 data: dict = Body(...)):
+    valid_username = get_username_from_signed_string(username)
+    print(data['info'])
+    print(valid_username)
+
 
 @app.get("/items/", response_class=HTMLResponse)
 def read_item(request: Request,
@@ -169,12 +169,10 @@ def read_item(request: Request,
               skip: Union[int, str] = 0,
               limit: Union[int, str] = 5):
     valid_username = get_username_from_signed_string(username)
-    print(skip)
     try:
         limit = skip + limit
         all_costs, count_costs = db.select_all_costs(valid_username, start=skip,
                                                      end=limit)
-        print(f'Всего: {count_costs}')
         context = {
             "request": request,
             "user": valid_username,
@@ -183,9 +181,9 @@ def read_item(request: Request,
             "skip_more": skip + 5,
             "skip_less": skip - 5,
         }
-        response = tem.TemplateResponse('info.html', context)
+        # response = tem.TemplateResponse('info.html', context)
+        response = tem.TemplateResponse('edit.html', context)
         return response
-        # return fake_items_db[skip: skip + limit]  # срез
     except Exception as e:
         return f'Wrong: {e}'
 

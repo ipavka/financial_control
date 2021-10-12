@@ -1,0 +1,28 @@
+/*body {*/
+/*    font-family: Helvetica;*/
+/*}*/
+input::-ms-clear {
+    display: none;
+}
+td.Prc {
+    min-width: 60px;
+    text-align: right;
+}
+table.KKK {
+    border: 0;
+    border-spacing: 0;
+}
+
+table.KKK th {
+    color: white;
+    background-color: #335033;
+}
+
+table.KKK tr:nth-child(even) {
+    background: #efefef;
+}
+
+table.KKK td {
+    border: 2px solid #e1e1e1;
+    padding: 3px;
+}

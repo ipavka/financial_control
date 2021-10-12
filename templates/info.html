@@ -9,6 +9,7 @@
     <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <script async src="../static/js/index.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
         {% for row in all_costs %}
             <tr>
                 <td>{{ row.id }}</td>
-                <td>{{ row.how_much }}</td>
+                <td onclick="handle(this)">{{ row.how_much }}</td>
                 <td>{{ row.description }}</td>
                 <td>{{ row.category }}</td>
                 <td>{{ row.created }}</td>
