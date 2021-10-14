@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Инфо</title>
     <meta name="viewport" content="with=device-width, initial-scale=1">
-    <link href="../static/css/edit.css" rel="stylesheet">
+{#    <link href="../static/css/edit.css" rel="stylesheet">#}
+    <link href="../static/css/style.css" rel="stylesheet">
     <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
@@ -15,7 +16,7 @@
 <body>
 <h1>Тут Выборки и редактирование</h1>
 
-<table id="tab1" class="KKK">
+<table id="edit-table" class="main-table">
     <thead>
     <tr>
         <th>id</th>
@@ -23,6 +24,7 @@
         <th>Описание</th>
         <th>Категория</th>
         <th>Дата</th>
+{#        <th>Удалить</th>#}
     </tr>
     </thead>
     {% for row in all_costs %}
@@ -32,16 +34,27 @@
         <td>{{ row.description }}</td>
         <td>{{ row.category }}</td>
         <td>{{ row.created }}</td>
+        <td>
+            <form method="POST" action="/del_cost">
+                <p>
+{#                    <input type="hidden" name="cost_id" value="{{ row.id }}">#}
+                    <label>
+                        <input class="check-box" type="checkbox" name="cost_id" value="{{ row.id }}" required>
+                    </label>
+{#                    <input type="submit" value="" class="button-del">#}
+                </p>
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
 
 <div class="links">
     {% if skip_less >= 0 %}
-    <a class="links-a"href="/items/?skip={{ skip_less }}">back</a>
+    <a class="links-a" href="/items/?skip={{ skip_less }}">back</a>
     {% endif %}
     {% if count_costs > skip_more %}
-    <a class="links-a"href="/items/?skip={{ skip_more }}">next</a>
+    <a class="links-a" href="/items/?skip={{ skip_more }}">next</a>
     {% endif %}
 </div>
 

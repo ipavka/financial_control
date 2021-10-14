@@ -251,6 +251,27 @@ def delete_last_cost(request: Request,
     return response
 
 
+@app.post('/del_cost', response_class=HTMLResponse)
+def delete_selected_cost(request: Request,
+                         cost_id: str = Form(...),
+                         username: Optional[str] = Cookie(default=None),
+                         ):
+    print(cost_id)
+    print(username)
+    # valid_username = get_username_from_signed_string(username)
+    # db.delete_last_cost(cost_id)
+    # context = {
+    #     "request": request,
+    #     "name_user": valid_username,
+    #     "delete_cost": True,
+    #     "report": description,
+    # }
+    # response = tem.TemplateResponse('main.html', context)
+    # return response
+    response = RedirectResponse(url='/items/', status_code=status.HTTP_302_FOUND)
+    return response
+
+
 @app.get('/logout', response_class=HTMLResponse)
 def logout_user():
     response = RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)

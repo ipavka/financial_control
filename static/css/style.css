@@ -80,6 +80,11 @@ form {
     border:1px solid #B9B29F;
     border-radius: 20px;
 }
+
+input::-ms-clear {
+    display: none;
+}
+
 th {
   /*border-bottom: 3px solid #B9B29F;*/
   padding: 10px;
@@ -97,6 +102,15 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
   background: #E8E6D1;
 }
+
+.button-del {
+    width: 25px;
+    height: 25px;
+    border-radius: 40px;
+    background-color: #e51616;
+    /*margin: 20px auto;*/
+}
+
 /* Таблица конец */
 
 .links {
