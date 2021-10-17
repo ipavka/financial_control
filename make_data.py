@@ -21,7 +21,7 @@ def make_date():
     return date
 
 def convert_in_datetime(data: str) -> str:
-    """ Из строки формата 'datetime' делает лучшую  визуализацию """
+    """ Из строки формата 'datetime' делает лучшую визуализацию """
     date_string = datetime.fromisoformat(data)
     return date_string.strftime("%H:%M %d/%m/%y")
 

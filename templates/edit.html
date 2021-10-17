@@ -14,10 +14,11 @@
 
 <body>
 <h1>Редактирование / Удаление</h1>
-
+<h3>Всего записей {{ count_costs }}</h3>
 <table id="edit-table" class="main-table">
     <thead>
     <tr>
+        <th>№</th>
         <th>Сумма</th>
         <th>Описание</th>
         <th>Категория</th>
@@ -28,10 +29,11 @@
     </thead>
     {% for cost in all_costs %}
     <tr>
+        <td>{{ cost.row_num }}</td>
         <td id="{{ cost.id }}" class="Prc">{{ cost.how_much }}</td>
         <td>{{ cost.description }}</td>
         <td>{{ cost.category }}</td>
-        <td>{{ cost.created }}</td>
+        <td id="ch-date">{{ cost.created }}</td>
         <td>{{ cost.id }}</td>
         <td class="btn-del">
             <form method="POST" action="/del_cost">

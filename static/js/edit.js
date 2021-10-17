@@ -84,3 +84,28 @@ async function endEdit(input) {
     td.style.backgroundColor = oldColor;
 }
 applyEdit("edit-table", [0]);
+
+// меняю отображение даты на более компактный
+const options = {
+    day: 'numeric',
+    month: 'numeric',
+    year: '2-digit',
+    hour: 'numeric',
+    minute: 'numeric',
+}
+
+function getDate(str) {
+    let date = new Date(str);
+    let myDate = date.toLocaleString('ru', options).split(', ')
+    let time = myDate[1]
+    let shortDate = myDate[0].replaceAll('.', '/')
+    return [time, shortDate]
+}
+
+const elementsList = document.querySelectorAll("#ch-date");
+const elementsArray = [...elementsList];
+
+elementsArray.forEach(element => {
+    element.innerHTML = getDate(element.innerHTML).join(' ');
+});
+

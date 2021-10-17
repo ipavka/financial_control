@@ -86,14 +86,14 @@ class SQLite:
     def select_all_costs(self, user_name: str, start: int = None, end: int = None):
         """ Извлечь все расходы пользователя """
         Costs = namedtuple('Costs', 'id, how_much, description, category, '
-                                    'created')
+                                    'created row_num')
         result = []
         with self.connection:
             data = self.cursor.execute(
-                f'SELECT cost_id, sum_of_money_co, descrip_co, category, created '
+                f'SELECT cost_id, sum_of_money_co, descrip_co, category, created, '
+                f'row_number() OVER(ORDER BY created DESC) AS row_num '
                 f'FROM costs '
-                f'WHERE `who_spend` = ? '
-                f'ORDER BY created DESC ',
+                f'WHERE `who_spend` = ? ',
                 (user_name,)).fetchall()
             if not data:
                 return None
