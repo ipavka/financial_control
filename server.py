@@ -293,7 +293,7 @@ if __name__ == '__main__':
     # data_dict = db.select_last_costs('demo')
     # data_dict = db.select_all_costs('demo', start=0, end=10)
     # data_dict1 = db.select_all_costs('demo', start=10, end=20)
-    # data_dict2 = db.select_all_costs('demo', start=20, end=30)
+    data_dict2 = db.select_all_costs('demo', start=0, end=30)
     # result = {}
     # for i in data_dict:
     #     result[i[0]] = f"{i[1]}, {convert_in_datetime(i[2])}"
@@ -302,7 +302,7 @@ if __name__ == '__main__':
     # print(result)
     # pprint(data_dict.get(max(data_dict.keys())))
     # pprint(sorted(data_dict.items())[-1])
-    # pprint(data_dict[0])
+    pprint(data_dict2[0])
     # pprint(data_dict1[0])
     # pprint(data_dict2[0])
     # result = db.get_all_categories('demo')

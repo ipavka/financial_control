@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Инфо</title>
     <meta name="viewport" content="with=device-width, initial-scale=1">
-{#    <link href="../static/css/edit.css" rel="stylesheet">#}
     <link href="../static/css/style.css" rel="stylesheet">
     <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -14,35 +13,30 @@
 </head>
 
 <body>
-<h1>Тут Выборки и редактирование</h1>
+<h1>Редактирование / Удаление</h1>
 
 <table id="edit-table" class="main-table">
     <thead>
     <tr>
-        <th>id</th>
         <th>Сумма</th>
         <th>Описание</th>
         <th>Категория</th>
         <th>Дата</th>
-{#        <th>Удалить</th>#}
+        <th>id</th>
+        <th>DEL</th>
     </tr>
     </thead>
-    {% for row in all_costs %}
+    {% for cost in all_costs %}
     <tr>
-        <td>{{ row.id }}</td>
-        <td id="{{ row.id }}" class="Prc">{{ row.how_much }}</td>
-        <td>{{ row.description }}</td>
-        <td>{{ row.category }}</td>
-        <td>{{ row.created }}</td>
-        <td>
+        <td id="{{ cost.id }}" class="Prc">{{ cost.how_much }}</td>
+        <td>{{ cost.description }}</td>
+        <td>{{ cost.category }}</td>
+        <td>{{ cost.created }}</td>
+        <td>{{ cost.id }}</td>
+        <td class="btn-del">
             <form method="POST" action="/del_cost">
-                <p>
-{#                    <input type="hidden" name="cost_id" value="{{ row.id }}">#}
-                    <label>
-                        <input class="check-box" type="checkbox" name="cost_id" value="{{ row.id }}" required>
-                    </label>
-{#                    <input type="submit" value="" class="button-del">#}
-                </p>
+                    <input type="hidden" name="cost_id" value="{{ cost.id }}">
+                    <input type="submit" value="&#10060" class="button-del-items4">
             </form>
         </td>
     </tr>

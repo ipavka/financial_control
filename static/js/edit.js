@@ -83,4 +83,4 @@ async function endEdit(input) {
     td.style.paddingBottom = padBottom;
     td.style.backgroundColor = oldColor;
 }
-applyEdit("edit-table", [1]);
+applyEdit("edit-table", [0]);

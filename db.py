@@ -67,7 +67,7 @@ class SQLite:
                 return "".join(result)
 
     def select_last_costs(self, user_name: str, count: int = None):
-        """ Извлечь расходы пользоватля кратко """
+        """ Извлечь расходы пользователя кратко """
         result = {}
         with self.connection:
             data = self.cursor.execute(
@@ -84,7 +84,7 @@ class SQLite:
                 return result
 
     def select_all_costs(self, user_name: str, start: int = None, end: int = None):
-        """ Извлечь все расходы пользоватля """
+        """ Извлечь все расходы пользователя """
         Costs = namedtuple('Costs', 'id, how_much, description, category, '
                                     'created')
         result = []
@@ -93,7 +93,7 @@ class SQLite:
                 f'SELECT cost_id, sum_of_money_co, descrip_co, category, created '
                 f'FROM costs '
                 f'WHERE `who_spend` = ? '
-                f'ORDER BY created ',
+                f'ORDER BY created DESC ',
                 (user_name,)).fetchall()
             if not data:
                 return None

@@ -108,7 +108,22 @@ tr:nth-child(even) {
     height: 25px;
     border-radius: 40px;
     background-color: #e51616;
-    /*margin: 20px auto;*/
+}
+
+.btn-del {
+    border: none;
+    background: ghostwhite;
+}
+
+.button-del-items4 {
+    width: 30px;
+    height: 30px;
+    border-radius: 40px;
+    background-color: #e51616;
+    padding: 0;
+    font-size: 15px;
+    display: inline-block;
+    margin: auto;
 }
 
 /* Таблица конец */
@@ -198,8 +213,7 @@ tr:nth-child(even) {
 
 .last-note {
     padding: 32px;
-    /*position: fixed;*/
-	bottom: 0;
+    bottom: 0;
     text-align: left;
     margin-top: 20px;
 }
@@ -209,7 +223,7 @@ tr:nth-child(even) {
     margin-bottom: 51px;
 }
 
-@media (max-width: 320px) {
+@media screen and (max-width: 320px) {
     .card {
         width: 100%;
     }
