@@ -16,7 +16,6 @@ function applyEdit(tabID, editables) {
             let tds = rows[r].getElementsByTagName("td");
             for (let c = 0; c < tds.length; c++) {
                 if (editables.indexOf(c) > -1)
-                    // console.log(tds[0])
                     tds[c].onclick = function () { beginEdit(this); };
             }
         }
@@ -60,10 +59,7 @@ async function endEdit(input) {
     let td = input.parentNode;
     td.removeChild(td.firstChild);	//remove input
     td.innerHTML = input.value;
-    // console.log(td.id)
-    // let change = input.value;
 
-    // console.log(td.innerHTML)
     if (oldText !== input.value.trim() ) {
         let change = {
             in: input.value,
@@ -83,7 +79,7 @@ async function endEdit(input) {
     td.style.paddingBottom = padBottom;
     td.style.backgroundColor = oldColor;
 }
-applyEdit("edit-table", [0]);
+applyEdit("edit-table", [1]);
 
 // меняю отображение даты на более компактный
 const options = {

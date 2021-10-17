@@ -126,6 +126,48 @@ tr:nth-child(even) {
     margin: auto;
 }
 
+@media screen and (max-width: 600px) {
+    table thead {
+        display: none;
+    }
+    table tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+    }
+    td {
+        border: none;
+    }
+
+    tr {
+        margin: 5px;
+    }
+
+    table td {
+        display: block;
+        text-align: right;
+        font-size: 15px;
+        border-bottom: 1px dotted #ccc;
+        border-right: 1px solid transparent;
+        border-radius: 0;
+    }
+    table td:last-child {
+        border-bottom: 0;
+    }
+    table td:before {
+        content: attr(data-label);
+        float: left;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    #edit-table {
+        width: 270px;
+    }
+
+}
+
+
 /* Таблица конец */
 
 .links {
@@ -218,10 +260,15 @@ tr:nth-child(even) {
     margin-top: 20px;
 }
 
-.card__img {
-    align-self: center;
-    margin-bottom: 51px;
+.headers-edit {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 }
+/*.card__img {*/
+/*    align-self: center;*/
+/*    margin-bottom: 51px;*/
+/*}*/
 
 @media screen and (max-width: 320px) {
     .card {
