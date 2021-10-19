@@ -39,8 +39,3 @@ def convert_in_datetime(data: str) -> str:
 
 if __name__ == '__main__':
     pass
-    # print(make_date())
-    # print(ru_date_unix()[0])
-    # print(ru_date_unix()[1])
-    # print(ru_date_unix())
-    # print(convert_in_datetime('2021-09-27 19:02:24'))
