@@ -2,9 +2,6 @@
 .env
 *.db
 *.sql
-switch_case_statements.py
-hash_make.py
-work_manual.txt
-test_scripts.ddl
+dev_dir
 forDev.js
 __pycache__

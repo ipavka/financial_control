@@ -1,11 +1,5 @@
 import re
 
-cost = 't60 кола кола кола кола кола кола кола кола'
-cost2 = '1200 учеба курс stepik'
-cost3 = '250 сыр'
-cost4 = '250 кола жб'
-cost5 = '250'
-
 
 def get_category_name(find_item: str, data: dict) -> str:
     """ Определяем категорию по алиасу """
@@ -29,15 +23,3 @@ def pars_user_input(user_in: str):
 
 if __name__ == '__main__':
     pass
-
-    # print(pars_user_input(cost2))
-    for i in (cost, cost2, cost3, cost4, cost5):
-        print(pars_user_input(i))
-    # print(len(' '.join(cost3.split()[1:])))
-    # print(cost3.split()[1:])
-    # sum_of_cost1, alias1, description1 = pars_user_input(cost2)
-    # print(sum_of_cost1)
-    # print(alias1)
-    # print(description1)
-
-

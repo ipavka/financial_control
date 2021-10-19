@@ -166,14 +166,11 @@ tr:nth-child(even) {
     }
 
 }
-
-
 /* Таблица конец */
 
 .links {
     margin-top: 20px;
     display: inline-block;
-    /*background: #1C6EA4;*/
     color: #FFFFFF;
     padding: 2px 8px;
     border-radius: 5px;
@@ -265,10 +262,6 @@ tr:nth-child(even) {
     flex-direction: column;
     text-align: center;
 }
-/*.card__img {*/
-/*    align-self: center;*/
-/*    margin-bottom: 51px;*/
-/*}*/
 
 @media screen and (max-width: 320px) {
     .card {

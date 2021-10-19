@@ -113,6 +113,14 @@ class SQLite:
                                 f"({columns}) "
                                 f"VALUES({placeholders});", values)
 
+    def update_cost(self, data: dict):
+        """ Изменить сумму конкретного расхода """
+        with self.connection:
+            self.cursor.execute(f'UPDATE costs '
+                                f'SET sum_of_money_co = ? '
+                                f'WHERE cost_id = ? ',
+                                (data['cost'], data['cost_id']))
+
     def update_category(self, alias, user, category):
         """ добавить алиас в нужную категорию по определенному юзеру """
         with self.connection:

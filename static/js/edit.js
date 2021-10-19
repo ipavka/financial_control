@@ -23,7 +23,6 @@ function applyEdit(tabID, editables) {
 }
 let oldColor, oldText, padTop, padBottom = "";
 function beginEdit(td) {
-    // console.log(td.id)
     if (td.firstChild && td.firstChild.tagName === "INPUT")
         return;
 
@@ -70,8 +69,15 @@ async function endEdit(input) {
             headers: { 'Content-Type': 'application/json' },
             body: `{"cost": "${change.in}", "cost_id": "${change.id}" }`
         })
-        await response.json();
-        td.style.color = "red";
+        let response_json = await response.json();
+        if (response_json.success) {
+            alert(response_json.message)
+            td.style.color = "red";
+        } else {
+            alert(response_json.message)
+            td.innerHTML = oldText
+        }
+
     }
 
 
@@ -81,7 +87,7 @@ async function endEdit(input) {
 }
 applyEdit("edit-table", [1]);
 
-// меняю отображение даты на более компактный
+// change date display on a more compact
 const options = {
     day: 'numeric',
     month: 'numeric',

@@ -15,7 +15,7 @@
 
     <div class="top">
         <a class="btn-logout" href="/">Главная</a>
-        <a class="user-logo" href="#">{{ name_user.capitalize() }}
+        <a class="user-logo" href="/items">{{ name_user.capitalize() }}
             <img src="../static/img/user.png" title="User_data">
         </a>
         <a class="btn-logout" href="/logout">Выйти</a>
@@ -40,7 +40,7 @@
     <table class="main-table">
         <thead>
         <tr>
-            <th>Кетегория</th>
+            <th>Категория</th>
             <th>Алиасы</th>
         </tr>
         </thead>
@@ -73,14 +73,13 @@
     {% if added_alias %}
 
         <div class="card">
-            <h1 class="heading-mini">Ready</h1>
-            <p class="text">{{ choice }}</p>
-            <p class="text">{{ main_input }}</p>
-            <p class="text">{{ add_info }}</p>
+            <h1 class="heading-mini">Готово</h1>
+            <p class="text">Добавил Алиас: <b>{{ add_info.alias }}</b>
+                в категорию <b>{{ add_info.category}}</b></p>
+            <p class="text">Записал в расход: <b>{{ add_info.sum_of_cost }} {{ add_info.description }}</b></p>
             <a class="btn-logout" href="/resume">Продолжить записи</a>
         </div>
 
     {% endif %}
 </body>
-
 </html>

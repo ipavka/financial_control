@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS categories (
+    cat_id         INTEGER   PRIMARY KEY AUTOINCREMENT,
     codename CHAR (10) PRIMARY KEY,
     name     CHAR (10),
     creator  VARCHAR,
@@ -24,11 +25,6 @@ CREATE TABLE IF NOT EXISTS costs (
     who_spend       VARCHAR,
     view_date       CHAR (10),
     created         DATETIME,
-    FOREIGN KEY (
-        category
-    )
-    REFERENCES categories (codename) ON UPDATE CASCADE
-                                     ON DELETE CASCADE,
     FOREIGN KEY (
         who_spend
     )

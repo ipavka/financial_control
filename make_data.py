@@ -3,7 +3,7 @@ import pytz
 
 
 def ru_date_unix():
-    """ Принимает в "UTS" формате дату и делает название месяца на русском """
+    """ Делает дату название месяца на русском в актуальном времени """
     month_list = ('Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
                   'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря')
     tz = pytz.timezone("Europe/Moscow")
@@ -12,6 +12,17 @@ def ru_date_unix():
     date = time_str.strftime(f"%d_{month_list[month]}_%Y")
     time = time_str.strftime(f"%H:%M")
     return time, date
+
+
+def ru_date_from_datetime(data: datetime):
+    """ Принимает дату в формате datetime и делает сокращенную дату с
+    название месяца на русском """
+    month_list = ('Янв', 'Фев', 'Мар', 'Апр', 'Мая', 'Июн',
+                  'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек')
+
+    month = (int(data.strftime('%m'))-1)
+    date = data.strftime(f"%d_{month_list[month]}_%Y")
+    return date
 
 
 def make_date():
@@ -32,4 +43,4 @@ if __name__ == '__main__':
     # print(ru_date_unix()[0])
     # print(ru_date_unix()[1])
     # print(ru_date_unix())
-    print(convert_in_datetime('2021-09-27 19:02:24'))
+    # print(convert_in_datetime('2021-09-27 19:02:24'))
