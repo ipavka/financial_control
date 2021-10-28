@@ -15,10 +15,11 @@ from main import pars_user_input, get_category_name
 from make_data import make_date, ru_date_unix
 from config import (
     PASSWORD_SALT,
-    SECRET_KEY
+    SECRET_KEY,
+    DB_NAME
 )
 
-db = SQLite('log_info.db')
+db = SQLite(DB_NAME)
 
 app = FastAPI()
 
