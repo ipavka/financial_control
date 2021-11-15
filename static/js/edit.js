@@ -97,7 +97,7 @@ const options = {
 }
 
 function getDate(str) {
-    let date = new Date(str);
+    let date = new Date(str.replace(/ /g,"T"));
     let myDate = date.toLocaleString('ru', options).split(', ')
     let time = myDate[1]
     let shortDate = myDate[0].replaceAll('.', '/')
