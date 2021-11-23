@@ -17,6 +17,10 @@ body {
 
 .check-box {
     height: 30px;
+    appearance: auto;
+    -webkit-appearance: radio;
+    -webkit-box-align: center;
+    text-align: -webkit-center;
 }
 
 input {
@@ -83,26 +87,39 @@ form {
     border-radius: 20px;
 }
 
+.main-table-add {
+    border-collapse: separate;
+    color: #686461;
+    border:1px solid #B9B29F;
+    border-radius: 20px;
+    text-align: center;
+}
+
 input::-ms-clear {
     display: none;
 }
 
 th {
-  /*border-bottom: 3px solid #B9B29F;*/
   padding: 10px;
   text-align: center;
 }
 td {
-  padding: 3px;
-  text-align: center;
-  border:1px solid #B9B29F;
-  border-radius: 20px;
+    padding: 3px;
+    text-align: -webkit-center;
+    text-align: center;
+    border:1px solid #B9B29F;
+    border-radius: 20px;
 }
 tr:nth-child(odd) {
   /*background: white;*/
 }
 tr:nth-child(even) {
   background: #E8E6D1;
+}
+
+#new-alias { /*алиас на добавление в add.html*/
+    font-size: 20px;
+    color: #ec3a55;
 }
 
 .button-del {
@@ -130,10 +147,29 @@ tr:nth-child(even) {
     appearance: none;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 500px) {
     table thead {
         display: none;
     }
+
+    .main-table-add {
+        border-collapse: separate;
+        color: #686461;
+        border:1px solid #B9B29F;
+        text-align: center;
+        display: block;
+        font-size: 15px;
+        border-bottom: 1px dotted #ccc;
+        border-right: 1px solid transparent;
+        border-radius: 0;
+    }
+
+    .main-table-add td {
+        border: none;
+        text-align: center;
+        text-align: -webkit-center;
+    }
+
     table tr {
         margin-bottom: 10px;
         display: block;
@@ -141,6 +177,8 @@ tr:nth-child(even) {
     }
     td {
         border: none;
+        text-align: right;
+        text-align: -webkit-center;
     }
 
     tr {

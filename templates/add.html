@@ -9,6 +9,7 @@
     <link rel="icon" href="../static/img/dollar.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
 </head>
 
 <body>
@@ -37,7 +38,7 @@
     </div>
 
     <div class="block-table">
-    <table class="main-table">
+    <table class="main-table-add">
         <thead>
         <tr>
             <th>Категория</th>
@@ -47,11 +48,12 @@
 
     {% for name, data in data_table.items() %}
         <tr>
+<!--            <td> <b id="new-alias">{{ name }}</b> <br>-->
             <td> <b>{{ name }}</b> <br>
             <div class="arrow">
                 <span></span>
             </div>
-            Добавить алиас <b><i>{{ data_in }}</i></b> в эту категорию?
+            Добавить алиас <b id="new-alias">{{ data_in }}</b> в эту категорию?
             <form method="POST" action="/add">
                 <p>
                     <input class="check-box" type="checkbox" name="choice" value="{{ name }}" required>
