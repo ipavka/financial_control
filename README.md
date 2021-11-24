@@ -19,20 +19,19 @@
 
 ##### - Запись расходов
 
-<img src="" width="300" height="500"/>
+<img src="https://user-images.githubusercontent.com/72130001/143210009-2fe14235-56be-4a8b-9a01-e2d33c54b427.gif" width="300" height="500"/>
 
 ##### - Добавление алиаса
 
-<img src="" width="300" height="500"/>
+<img src="https://user-images.githubusercontent.com/72130001/143210097-e3bb90d2-1129-4c01-9127-f488bfe37097.gif" width="300" height="500"/>
 
 ##### - Изменение суммы
 
-<img src="" width="300" height="500"/>
+<img src="https://user-images.githubusercontent.com/72130001/143210136-546564b3-579e-478f-bdac-55f2873bb516.gif" width="300" height="500"/>
 
 ##### - Удаление записи
 
-<img src="" width="300" height="500"/>
-
+<img src="https://user-images.githubusercontent.com/72130001/143210193-67608c1f-8048-4fb3-b29f-672fa4d64d00.gif" width="300" height="500"/>
 
 ### Что работает/не работает:
 - Не работает регистрация
